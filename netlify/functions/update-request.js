@@ -17,6 +17,15 @@ exports.handler = async (event, context) => {
     };
   }
 
+  // Verificar que sea POST
+  if (event.httpMethod !== 'POST') {
+    return {
+      statusCode: 405,
+      headers,
+      body: JSON.stringify({ error: 'Method not allowed' })
+    };
+  }
+
   try {
     // Verificar variables de entorno
     if (!process.env.AIRTABLE_API_KEY || !process.env.AIRTABLE_BASE_ID) {
@@ -26,27 +35,29 @@ exports.handler = async (event, context) => {
     const base = new Airtable({apiKey: process.env.AIRTABLE_API_KEY})
       .base(process.env.AIRTABLE_BASE_ID);
 
-    const records = [];
+    const { id, status } = JSON.parse(event.body);
     
-    // Obtener todos los registros de la tabla
-    await base('Requerimientos').select({
-      view: "Grid view" // O el nombre de tu vista por defecto
-    }).eachPage((pageRecords, fetchNextPage) => {
-      pageRecords.forEach(record => {
-        records.push({
-          id: record.id,
-          ...record.fields
-        });
-      });
-      fetchNextPage();
-    });
+    if (!id || !status) {
+      throw new Error('Missing required fields: id and status');
+    }
+
+    // Actualizar el registro en Airtable
+    const updatedRecord = await base('Requerimientos').update([
+      {
+        id: id,
+        fields: {
+          'Estado': status
+        }
+      }
+    ]);
 
     return {
       statusCode: 200,
       headers,
       body: JSON.stringify({
         success: true,
-        records: records
+        message: 'Estado actualizado correctamente',
+        record: updatedRecord[0]
       })
     };
   } catch (error) {
@@ -56,8 +67,7 @@ exports.handler = async (event, context) => {
       headers,
       body: JSON.stringify({
         success: false,
-        error: error.message,
-        records: []
+        error: error.message
       })
     };
   }
