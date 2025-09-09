@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitud de Mobiliario - Hospital Susana López</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .form-section {
+            padding: 40px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab {
+            padding: 15px 30px;
+            background: none;
+            border: none;
+            color: #666;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .tab.active {
+            color: #667eea;
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #667eea;
+        }
+
+        .items-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        .items-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .item-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .item-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .item-card.selected {
+            border-color: #667eea;
+            background: linear-gradient(to right, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+        }
+
+        .item-checkbox {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+
+        .item-info {
+            flex: 1;
+        }
+
+        .item-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .item-specs {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .quantity-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .quantity-input {
+            width: 60px;
+            text-align: center;
+            padding: 5px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+        }
+
+        .selected-items {
+            background: #f0f4ff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .selected-items h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .selected-item {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .remove-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .remove-btn:hover {
+            background: #ff5252;
+        }
+
+        .submit-section {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 50px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .success-message {
+            display: none;
+            background: #4caf50;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .success-message.active {
+            display: block;
+        }
+
+        .error-message {
+            display: none;
+            background: #f44336;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .error-message.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏥 Hospital Susana López</h1>
+            <p>Sistema de Solicitud de Mobiliario</p>
+        </div>
+
+        <div class="form-section">
+            <div class="success-message" id="successMessage">
+                ✅ Solicitud enviada correctamente
+            </div>
+            <div class="error-message" id="errorMessage">
+                ❌ Error al enviar la solicitud. Por favor intente nuevamente.
+            </div>
+
+            <form id="requerimientoForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="servicio">Servicio/Departamento *</label>
+                        <select id="servicio" required>
+                            <option value="">Seleccione un servicio</option>
+                            <option value="urgencias">Urgencias</option>
+                            <option value="hospitalizacion">Hospitalización</option>
+                            <option value="cirugia">Cirugía</option>
+                            <option value="pediatria">Pediatría</option>
+                            <option value="ginecologia">Ginecología</option>
+                            <option value="medicina_interna">Medicina Interna</option>
+                            <option value="uci">UCI</option>
+                            <option value="laboratorio">Laboratorio</option>
+                            <option value="radiologia">Radiología</option>
+                            <option value="farmacia">Farmacia</option>
+                            <option value="administracion">Administración</option>
+                            <option value="almacen">Almacén</option>
+                            <option value="mantenimiento">Mantenimiento</option>
+                            <option value="recursos_humanos">Recursos Humanos</option>
+                            <option value="contabilidad">Contabilidad</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="solicitante">Nombre del Solicitante *</label>
+                        <input type="text" id="solicitante" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cargo">Cargo *</label>
+                        <input type="text" id="cargo" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Correo Electrónico *</label>
+                        <input type="email" id="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telefono">Teléfono</label>
+                        <input type="tel" id="telefono">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fecha">Fecha de Solicitud *</label>
+                        <input type="date" id="fecha" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="justificacion">Justificación de la Solicitud *</label>
+                    <textarea id="justificacion" required placeholder="Explique brevemente por qué necesita estos elementos..."></textarea>
+                </div>
+
+                <div class="tabs">
+                    <button type="button" class="tab active" onclick="changeTab('administrativo')">
+                        📁 Mobiliario Administrativo
+                    </button>
+                    <button type="button" class="tab" onclick="changeTab('medico')">
+                        🏥 Mobiliario Médico
+                    </button>
+                </div>
+
+                <div class="items-section">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Buscar mobiliario...">
+                        <span class="search-icon">🔍</span>
+                    </div>
+                    <div class="items-grid" id="itemsGrid">
+                        <!-- Los items se cargarán dinámicamente aquí -->
+                    </div>
+                </div>
+
+                <div class="selected-items" id="selectedItemsSection" style="display: none;">
+                    <h3>📋 Items Seleccionados</h3>
+                    <div id="selectedItemsList"></div>
+                </div>
+
+                <div class="submit-section">
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        Enviar Solicitud
+                    </button>
+                </div>
+
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Enviando solicitud...</p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Configuración de Airtable
+        const AIRTABLE_API_KEY = 'patbDVmW6YTACRGIC.065f7ce363b7a52a4297e5837ea1eef9658633e50b7da5d85219af6cb2408ce6'; // Reemplazar con tu API Key
+        const AIRTABLE_BASE_ID = 'appGgF2ZFqepOOQej'; // Reemplazar con tu Base ID
+        const AIRTABLE_TABLE_NAME = 'Requerimientos';
+
+        // Datos de mobiliario (simplificado para demostración)
+        const mobiliarioAdministrativo = [
+            { id: 1, nombre: "ARCHIVADOR", caracteristicas: "GRANDE", categoria: "administrativo" },
+            { id: 2, nombre: "ARCHIVADOR AEREO 3 ESPACIOS", caracteristicas: "Con 3 espacios para documentos", categoria: "administrativo" },
+            { id: 3, nombre: "Archivador aereo para documentos", caracteristicas: "Medidas de 120cmx40cmx30cm con estructura en RH de facil limpieza color blanco", categoria: "administrativo" },
+            { id: 4, nombre: "ARCHIVADOR PEQUEÑO", caracteristicas: "3 CAJONES SOPORTAR PESO DEBAJO DE MESÓN", categoria: "administrativo" },
+            { id: 5, nombre: "Archivador RH", caracteristicas: "Medidas de 85 cm x 80 cm x 50 cm de cuatro gavetas", categoria: "administrativo" },
+            { id: 6, nombre: "Archivador RH - ojo debajo de meson", caracteristicas: "Medidas de 60 cm x 80 cm x 55 cm de tres gavetas", categoria: "administrativo" },
+            { id: 7, nombre: "Armario cajonero rimax", caracteristicas: "Largo: 45 cm, Ancho: 65 cm, Alto: 102 cm", categoria: "administrativo" },
+            { id: 8, nombre: "Armario mdf", caracteristicas: "Medidas de 200x100*50 con cubierta en RH", categoria: "administrativo" },
+            { id: 9, nombre: "CARRO AUXILIAR OFICINA", caracteristicas: "Móvil con ruedas para transporte de documentos", categoria: "administrativo" },
+            { id: 10, nombre: "ESCRITORIO EN L", caracteristicas: "Escritorio en forma de L para mayor espacio de trabajo", categoria: "administrativo" }
+        ];
+
+        const mobiliarioMedico = [
+            { id: 101, nombre: "Algodonera hospitalaria", caracteristicas: "En acero inoxidable pequeña", categoria: "medico" },
+            { id: 102, nombre: "Armario mediano plástico", caracteristicas: "Gris Hielo- Negro, de dos puertas con entrepaños internos", categoria: "medico" },
+            { id: 103, nombre: "Atril de pared", caracteristicas: "En acero inoxidable", categoria: "medico" },
+            { id: 104, nombre: "Atril de piso", caracteristicas: "Porta Suero En Acero Inoxidable - Para Bomba De Infusión", categoria: "medico" },
+            { id: 105, nombre: "BALONES BOBATH MEDIANOS", caracteristicas: "Para rehabilitación física", categoria: "medico" },
+            { id: 106, nombre: "Báscula", caracteristicas: "Báscula Brazo Plegable 300kg, 69,5 largo x 45 ancho", categoria: "medico" },
+            { id: 107, nombre: "BASCULA PARA ADULTOS", caracteristicas: "Capacidad hasta 200kg", categoria: "medico" },
+            { id: 108, nombre: "Bebedero de agua pedestal", caracteristicas: "Alto 105 cm x Ancho 38 cm x Prof. 38 cm con filtro", categoria: "medico" },
+            { id: 109, nombre: "CAMILLA DE TRANSPORTE", caracteristicas: "Con ruedas y barandas laterales", categoria: "medico" },
+            { id: 110, nombre: "CARRO DE CURACIONES", caracteristicas: "En acero inoxidable con múltiples niveles", categoria: "medico" }
+        ];
+
+        let currentTab = 'administrativo';
+        let selectedItems = {};
+
+        // Inicializar fecha actual
+        document.getElementById('fecha').valueAsDate = new Date();
+
+        function changeTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            loadItems();
+        }
+
+        function loadItems() {
+            const items = currentTab === 'administrativo' ? mobiliarioAdministrativo : mobiliarioMedico;
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const filteredItems = items.filter(item => 
+                item.nombre.toLowerCase().includes(searchTerm) || 
+                item.caracteristicas.toLowerCase().includes(searchTerm)
+            );
+
+            const grid = document.getElementById('itemsGrid');
+            grid.innerHTML = filteredItems.map(item => `
+                <div class="item-card ${selectedItems[item.id] ? 'selected' : ''}" onclick="toggleItem(${item.id})">
+                    <input type="checkbox" class="item-checkbox" ${selectedItems[item.id] ? 'checked' : ''}>
+                    <div class="item-info">
+                        <div class="item-name">${item.nombre}</div>
+                        <div class="item-specs">${item.caracteristicas}</div>
+                    </div>
+                    <div class="item-quantity" onclick="event.stopPropagation()">
+                        <button class="quantity-btn" onclick="decreaseQuantity(${item.id})">-</button>
+                        <input type="number" class="quantity-input" id="qty-${item.id}" 
+                               value="${selectedItems[item.id]?.cantidad || 1}" min="1">
+                        <button class="quantity-btn" onclick="increaseQuantity(${item.id})">+</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleItem(itemId) {
+            const allItems = [...mobiliarioAdministrativo, ...mobiliarioMedico];
+            const item = allItems.find(i => i.id === itemId);
+            
+            if (selectedItems[itemId]) {
+                delete selectedItems[itemId];
+            } else {
+                selectedItems[itemId] = {
+                    ...item,
+                    cantidad: parseInt(document.getElementById(`qty-${itemId}`).value) || 1
+                };
+            }
+            
+            loadItems();
+            updateSelectedItemsList();
+        }
+
+        function increaseQuantity(itemId) {
+            const input = document.getElementById(`qty-${itemId}`);
+            input.value = parseInt(input.value) + 1;
+            if (selectedItems[itemId]) {
+                selectedItems[itemId].cantidad = parseInt(input.value);
+                updateSelectedItemsList();
+            }
+        }
+
+        function decreaseQuantity(itemId) {
+            const input = document.getElementById(`qty-${itemId}`);
+            if (parseInt(input.value) > 1) {
+                input.value = parseInt(input.value) - 1;
+                if (selectedItems[itemId]) {
+                    selectedItems[itemId].cantidad = parseInt(input.value);
+                    updateSelectedItemsList();
+                }
+            }
+        }
+
+        function updateSelectedItemsList() {
+            const selectedArray = Object.values(selectedItems);
+            const section = document.getElementById('selectedItemsSection');
+            const list = document.getElementById('selectedItemsList');
+            
+            if (selectedArray.length > 0) {
+                section.style.display = 'block';
+                list.innerHTML = selectedArray.map(item => `
+                    <div class="selected-item">
+                        <span>${item.nombre} - Cantidad: ${item.cantidad}</span>
+                        <button class="remove-btn" onclick="removeItem(${item.id})">Eliminar</button>
+                    </div>
+                `).join('');
+            } else {
+                section.style.display = 'none';
+            }
+        }
+
+        function removeItem(itemId) {
+            delete selectedItems[itemId];
+            loadItems();
+            updateSelectedItemsList();
+        }
+
+        document.getElementById('searchInput').addEventListener('input', loadItems);
+
+        document.getElementById('requerimientoForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const selectedArray = Object.values(selectedItems);
+            if (selectedArray.length === 0) {
+                alert('Por favor seleccione al menos un item');
+                return;
+            }
+
+            document.getElementById('submitBtn').disabled = true;
+            document.getElementById('loading').classList.add('active');
+            
+            const formData = {
+                servicio: document.getElementById('servicio').value,
+                solicitante: document.getElementById('solicitante').value,
+                cargo: document.getElementById('cargo').value,
+                email: document.getElementById('email').value,
+                telefono: document.getElementById('telefono').value,
+                fecha: document.getElementById('fecha').value,
+                justificacion: document.getElementById('justificacion').value,
+                items: selectedArray.map(item => ({
+                    nombre: item.nombre,
+                    caracteristicas: item.caracteristicas,
+                    cantidad: item.cantidad,
+                    categoria: item.categoria
+                }))
+            };
+
+            try {
+                // Aquí iría la llamada a Airtable API
+                const response = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${AIRTABLE_API_KEY}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        fields: {
+                            'Servicio': formData.servicio,
+                            'Solicitante': formData.solicitante,
+                            'Cargo': formData.cargo,
+                            'Email': formData.email,
+                            'Telefono': formData.telefono,
+                            'Fecha': formData.fecha,
+                            'Justificacion': formData.justificacion,
+                            'Items': JSON.stringify(formData.items),
+                            'Estado': 'Pendiente'
+                        }
+                    })
+                });
+
+                if (response.ok) {
+                    document.getElementById('successMessage').classList.add('active');
+                    setTimeout(() => {
+                        document.getElementById('successMessage').classList.remove('active');
+                    }, 5000);
+                    
+                    // Limpiar formulario
+                    document.getElementById('requerimientoForm').reset();
+                    document.getElementById('fecha').valueAsDate = new Date();
+                    selectedItems = {};
+                    updateSelectedItemsList();
+                    loadItems();
+                } else {
+                    throw new Error('Error al enviar');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('errorMessage').classList.add('active');
+                setTimeout(() => {
+                    document.getElementById('errorMessage').classList.remove('active');
+                }, 5000);
+            } finally {
+                document.getElementById('submitBtn').disabled = false;
+                document.getElementById('loading').classList.remove('active');
+            }
+        });
+
+        // Cargar items iniciales
+        loadItems();
+    </script>
+</body>
+</html>
