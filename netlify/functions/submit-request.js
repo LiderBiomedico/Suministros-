@@ -17,6 +17,15 @@ exports.handler = async (event, context) => {
     };
   }
 
+  // Verificar que sea POST
+  if (event.httpMethod !== 'POST') {
+    return {
+      statusCode: 405,
+      headers,
+      body: JSON.stringify({ error: 'Method not allowed' })
+    };
+  }
+
   try {
     // Verificar variables de entorno
     if (!process.env.AIRTABLE_API_KEY || !process.env.AIRTABLE_BASE_ID) {
@@ -26,27 +35,33 @@ exports.handler = async (event, context) => {
     const base = new Airtable({apiKey: process.env.AIRTABLE_API_KEY})
       .base(process.env.AIRTABLE_BASE_ID);
 
-    const records = [];
+    // Parsear datos del request
+    const formData = JSON.parse(event.body);
     
-    // Obtener todos los registros de la tabla
-    await base('Requerimientos').select({
-      view: "Grid view" // O el nombre de tu vista por defecto
-    }).eachPage((pageRecords, fetchNextPage) => {
-      pageRecords.forEach(record => {
-        records.push({
-          id: record.id,
-          ...record.fields
-        });
-      });
-      fetchNextPage();
-    });
+    // Crear registro en Airtable
+    const createdRecord = await base('Requerimientos').create([
+      {
+        fields: {
+          'Servicio': formData.servicio,
+          'Solicitante': formData.solicitante,
+          'Cargo': formData.cargo,
+          'Email': formData.email,
+          'Telefono': formData.telefono || '',
+          'Fecha': formData.fecha,
+          'Justificacion': formData.justificacion,
+          'Items': JSON.stringify(formData.items), // Convertir array a JSON string
+          'Estado': 'Pendiente' // Estado inicial
+        }
+      }
+    ]);
 
     return {
       statusCode: 200,
       headers,
       body: JSON.stringify({
         success: true,
-        records: records
+        message: 'Solicitud enviada correctamente',
+        recordId: createdRecord[0].id
       })
     };
   } catch (error) {
@@ -56,8 +71,7 @@ exports.handler = async (event, context) => {
       headers,
       body: JSON.stringify({
         success: false,
-        error: error.message,
-        records: []
+        error: error.message
       })
     };
   }
