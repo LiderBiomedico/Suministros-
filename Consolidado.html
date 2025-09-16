@@ -333,9 +333,41 @@
 
         .export-section {
             display: flex;
-            justify-content: flex-end;
+            justify-content: space-between;
+            align-items: center;
             gap: 15px;
             margin-bottom: 20px;
+        }
+
+        .auto-refresh-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .refresh-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #48bb78;
+            animation: pulse 2s infinite;
+        }
+
+        .refresh-indicator.refreshing {
+            background: #f59e0b;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 15px;
         }
 
         .modal {
@@ -547,17 +579,28 @@
                 </button>
             </div>
 
-            <!-- Botones de exportación -->
+            <!-- Botones de exportación y estado de auto-actualización -->
             <div class="export-section">
-                <button class="btn btn-primary" onclick="refreshData()">
-                    🔄 Actualizar Datos
-                </button>
-                <button class="btn btn-secondary" onclick="exportToExcel()">
-                    📊 Exportar a Excel
-                </button>
-                <button class="btn btn-secondary" onclick="window.print()">
-                    🖨️ Imprimir
-                </button>
+                <div class="auto-refresh-status">
+                    <div class="refresh-indicator" id="refreshIndicator"></div>
+                    <span id="refreshStatus">Auto-actualización: Activa</span>
+                    <span id="lastUpdate">Última actualización: --:--</span>
+                </div>
+                
+                <div class="export-buttons">
+                    <button class="btn btn-primary" onclick="toggleAutoRefresh()">
+                        <span id="toggleText">⏸️ Pausar Auto-actualización</span>
+                    </button>
+                    <button class="btn btn-primary" onclick="refreshData()">
+                        🔄 Actualizar Ahora
+                    </button>
+                    <button class="btn btn-secondary" onclick="exportToExcel()">
+                        📊 Exportar a Excel
+                    </button>
+                    <button class="btn btn-secondary" onclick="window.print()">
+                        🖨️ Imprimir
+                    </button>
+                </div>
             </div>
 
             <!-- Tabs para diferentes vistas -->
@@ -654,10 +697,15 @@
         let allRequests = [];
         let filteredRequests = [];
         let currentView = 'cards';
+        let autoRefreshInterval = null;
+        let isAutoRefreshActive = true;
 
         // Función para cargar datos desde la función de Netlify
         async function loadDataFromAirtable() {
             try {
+                // Indicar que se está actualizando
+                document.getElementById('refreshIndicator').classList.add('refreshing');
+                
                 // CAMBIO: Usar función de Netlify en lugar de llamada directa
                 const response = await fetch('/.netlify/functions/get-requests');
 
@@ -670,6 +718,9 @@
                         ...record,
                         items: typeof record.Items === 'string' ? JSON.parse(record.Items) : record.Items || []
                     }));
+                    
+                    // Actualizar timestamp de última actualización
+                    updateLastRefreshTime();
                 } else {
                     console.error('Error al cargar datos');
                     allRequests = [];
@@ -677,11 +728,61 @@
             } catch (error) {
                 console.error('Error cargando datos:', error);
                 allRequests = [];
+            } finally {
+                // Quitar indicador de actualización
+                document.getElementById('refreshIndicator').classList.remove('refreshing');
             }
 
             filteredRequests = [...allRequests];
             updateStats();
             renderCurrentView();
+        }
+
+        // Función para actualizar el timestamp de la última actualización
+        function updateLastRefreshTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('es-CO', { 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit' 
+            });
+            document.getElementById('lastUpdate').textContent = `Última actualización: ${timeString}`;
+        }
+
+        // Función para iniciar la auto-actualización
+        function startAutoRefresh() {
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+            }
+            
+            autoRefreshInterval = setInterval(() => {
+                if (isAutoRefreshActive) {
+                    loadDataFromAirtable();
+                }
+            }, 5000); // 5 segundos
+        }
+
+        // Función para alternar la auto-actualización
+        function toggleAutoRefresh() {
+            isAutoRefreshActive = !isAutoRefreshActive;
+            
+            const statusElement = document.getElementById('refreshStatus');
+            const toggleElement = document.getElementById('toggleText');
+            const indicatorElement = document.getElementById('refreshIndicator');
+            
+            if (isAutoRefreshActive) {
+                statusElement.textContent = 'Auto-actualización: Activa';
+                toggleElement.textContent = '⏸️ Pausar Auto-actualización';
+                indicatorElement.style.display = 'block';
+                startAutoRefresh();
+            } else {
+                statusElement.textContent = 'Auto-actualización: Pausada';
+                toggleElement.textContent = '▶️ Reanudar Auto-actualización';
+                indicatorElement.style.display = 'none';
+                if (autoRefreshInterval) {
+                    clearInterval(autoRefreshInterval);
+                }
+            }
         }
 
         // Actualizar estadísticas
@@ -1089,7 +1190,7 @@
             renderCurrentView();
         }
 
-        // Actualizar datos
+        // Actualizar datos manualmente
         function refreshData() {
             document.getElementById('loadingCards').classList.add('active');
             document.getElementById('loadingTable').classList.add('active');
@@ -1139,9 +1240,25 @@
             }
         });
 
-        // Cargar datos al iniciar
+        // Manejar visibilidad de la página para pausar/reanudar auto-actualización
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                // Página oculta - pausar auto-actualización temporalmente
+                if (autoRefreshInterval) {
+                    clearInterval(autoRefreshInterval);
+                }
+            } else {
+                // Página visible - reanudar auto-actualización si estaba activa
+                if (isAutoRefreshActive) {
+                    startAutoRefresh();
+                }
+            }
+        });
+
+        // Cargar datos al iniciar y configurar auto-actualización
         window.addEventListener('load', () => {
             loadDataFromAirtable();
+            startAutoRefresh();
         });
     </script>
 </body>
