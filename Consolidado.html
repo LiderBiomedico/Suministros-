@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consolidado de Pedidos - Hospital Susana López</title>
-    <style>
+    <title>Consolidado de Pedidos - Hospital Susana López</title> 
+       <style>
         * {
             margin: 0;
             padding: 0;
@@ -35,10 +35,21 @@
         }
 
         .header-logo {
-            max-width: 120px;
-            height: auto;
+            width: 120px;
+            height: 120px;
             margin-bottom: 20px;
-            filter: brightness(0) invert(1);
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .header-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
         .header h1 {
@@ -452,9 +463,14 @@
 <body>
     <div class="container">
         <div class="header">
-            <img src="logo-hslv.png" alt="Hospital Susana López Logo" class="header-logo">
+            <!-- Logo HSL -->
+            <div class="header-logo">
+                <img src="logo-hslv.png" alt="Hospital Susana López Valencia - Logo" />
+            </div>
+            
             <h1>📊 Consolidado de Pedidos</h1>
             <p>Hospital Susana López - Sistema de Gestión de Mobiliario</p>
+            <p style="font-size: 0.9em; margin-top: 10px; opacity: 0.8;">Desarrollado por: Ing. Paul Eduardo Muñoz R.</p>
         </div>
 
         <div class="dashboard-section">
@@ -547,7 +563,7 @@
             <!-- Tabs para diferentes vistas -->
             <div class="tabs">
                 <button class="tab active" onclick="changeView('cards')">
-                    📇 Vista por Servicio
+                    🗂️ Vista por Servicio
                 </button>
                 <button class="tab" onclick="changeView('table')">
                     📋 Vista de Tabla
