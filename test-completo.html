@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnóstico Completo - Airtable</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .test-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .test-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 12px;
+            line-height: 1.4;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .status-ok { background: #28a745; }
+        .status-error { background: #dc3545; }
+        .status-warning { background: #ffc107; }
+        .checklist {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .checklist-item:last-child {
+            border-bottom: none;
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Diagnóstico Completo de Airtable</h1>
+        
+        <div class="test-section">
+            <h3>Paso 1: Diagnóstico Básico</h3>
+            <p>Verificar variables de entorno y configuración básica:</p>
+            <div class="test-buttons">
+                <button onclick="runDiagnostic()">🔍 Ejecutar Diagnóstico</button>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>Paso 2: Pruebas de Funcionalidad</h3>
+            <p>Probar las diferentes funciones de la aplicación:</p>
+            <div class="test-buttons">
+                <button onclick="testConnection()">🔗 Probar Conexión</button>
+                <button onclick="testRead()">📖 Probar Lectura</button>
+                <button onclick="testWrite()">✏️ Probar Escritura</button>
+                <button onclick="testUpdate()">🔄 Probar Actualización</button>
+            </div>
+        </div>
+
+        <div id="checklist" class="checklist" style="display: none;">
+            <h3>Lista de Verificación</h3>
+            <div id="checklistItems"></div>
+        </div>
+        
+        <div id="result" class="result"></div>
+        
+        <div class="test-section">
+            <h3>Información Técnica</h3>
+            <pre id="debug">Ejecute el diagnóstico para ver información detallada...</pre>
+        </div>
+
+        <div class="test-section">
+            <h3>Recomendaciones</h3>
+            <div id="recommendations">Ejecute las pruebas para obtener recomendaciones específicas.</div>
+        </div>
+    </div>
+
+    <script>
+        let currentTest = null;
+
+        function updateButton(button, loading = false) {
+            if (loading) {
+                button.disabled = true;
+                button.innerHTML = `<span class="loading"></span> Procesando...`;
+            } else {
+                button.disabled = false;
+                button.innerHTML = button.getAttribute('data-original') || button.innerHTML.split('</span>')[1] || button.innerHTML;
+            }
+        }
+
+        function showResult(type, message) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.className = `result ${type}`;
+            resultDiv.innerHTML = message;
+        }
+
+        function updateDebug(data) {
+            document.getElementById('debug').textContent = JSON.stringify(data, null, 2);
+        }
+
+        function updateRecommendations(recommendations) {
+            const recDiv = document.getElementById('recommendations');
+            if (recommendations && recommendations.length > 0) {
+                recDiv.innerHTML = `
+                    <ul>
+                        ${recommendations.map(rec => `<li>${rec}</li>`).join('')}
+                    </ul>
+                `;
+            } else {
+                recDiv.innerHTML = 'No hay recomendaciones específicas.';
+            }
+        }
+
+        function updateChecklist(diagnostics) {
+            const checklist = document.getElementById('checklist');
+            const items = document.getElementById('checklistItems');
+            
+            const checks = [
+                {
+                    label: 'Variables de entorno configuradas',
+                    status: diagnostics?.environment?.hasApiKey && diagnostics?.environment?.hasBaseId ? 'ok' : 'error'
+                },
+                {
+                    label: 'API Key tiene formato correcto',
+                    status: diagnostics?.validations?.apiKeyFormat?.isValid ? 'ok' : 'error'
+                },
+                {
+                    label: 'Base ID tiene formato correcto',
+                    status: diagnostics?.validations?.baseIdFormat?.isValid ? 'ok' : 'error'
+                },
+                {
+                    label: 'Conexión con Airtable exitosa',
+                    status: diagnostics?.connection?.success ? 'ok' : 'error'
+                },
+                {
+                    label: 'Acceso a tabla "Requerimientos"',
+                    status: diagnostics?.connection?.tableAccess ? 'ok' : 'error'
+                }
+            ];
+
+            items.innerHTML = checks.map(check => `
+                <div class="checklist-item">
+                    <span class="status-indicator status-${check.status}"></span>
+                    <span>${check.label}</span>
+                </div>
+            `).join('');
+
+            checklist.style.display = 'block';
+        }
+
+        async function runDiagnostic() {
+            const button = event.target;
+            updateButton(button, true);
+            
+            try {
+                const response = await fetch('/.netlify/functions/diagnostico-airtable');
+                const data = await response.json();
+                
+                updateDebug(data);
+                updateRecommendations(data.recommendations);
+                updateChecklist(data.diagnostics);
+                
+                if (data.success) {
+                    showResult('success', '✅ Diagnóstico completado. La conexión funciona correctamente.');
+                } else {
+                    showResult('error', `❌ Se encontraron problemas: ${data.error}`);
+                }
+            } catch (error) {
+                showResult('error', `❌ Error ejecutando diagnóstico: ${error.message}`);
+                updateDebug({ error: error.message, stack: error.stack });
+            } finally {
+                updateButton(button, false);
+            }
+        }
+
+        async function testConnection() {
+            const button = event.target;
+            updateButton(button, true);
+            
+            try {
+                const response = await fetch('/.netlify/functions/test-connection');
+                const data = await response.json();
+                
+                updateDebug({ test: 'connection', response: data });
+                
+                if (response.ok && data.success) {
+                    showResult('success', '✅ Conexión exitosa con Airtable.');
+                } else {
+                    showResult('error', `❌ Error de conexión: ${data.error}`);
+                }
+            } catch (error) {
+                showResult('error', `❌ Error: ${error.message}`);
+            } finally {
+                updateButton(button, false);
+            }
+        }
+
+        async function testRead() {
+            const button = event.target;
+            updateButton(button, true);
+            
+            try {
+                const response = await fetch('/.netlify/functions/get-requests');
+                const data = await response.json();
+                
+                updateDebug({ test: 'read', response: data });
+                
+                if (response.ok && data.success) {
+                    showResult('success', `✅ Lectura exitosa. Encontrados ${data.records.length} registros.`);
+                } else {
+                    showResult('error', `❌ Error leyendo datos: ${data.error}`);
+                }
+            } catch (error) {
+                showResult('error', `❌ Error: ${error.message}`);
+            } finally {
+                updateButton(button, false);
+            }
+        }
+
+        async function testWrite() {
+            const button = event.target;
+            updateButton(button, true);
+            
+            const testData = {
+                servicio: 'test_diagnostico',
+                solicitante: 'Sistema de Pruebas',
+                cargo: 'Diagnóstico Automático',
+                email: 'test@diagnostico.com',
+                telefono: '0000000000',
+                fecha: new Date().toISOString().split('T')[0],
+                justificacion: `Prueba automática - ${new Date().toISOString()}`,
+                items: [{
+                    nombre: 'Item de prueba diagnóstico',
+                    caracteristicas: 'Generado automáticamente para pruebas',
+                    cantidad: 1,
+                    categoria: 'administrativo'
+                }]
+            };
+            
+            try {
+                const response = await fetch('/.netlify/functions/submit-request', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(testData)
+                });
+                
+                const data = await response.json();
+                
+                updateDebug({ test: 'write', request: testData, response: data });
+                
+                if (response.ok && data.success) {
+                    showResult('success', `✅ Escritura exitosa. ID del registro: ${data.recordId}`);
+                    // Guardar el ID para la prueba de actualización
+                    window.testRecordId = data.recordId;
+                } else {
+                    showResult('error', `❌ Error escribiendo datos: ${data.error}`);
+                }
+            } catch (error) {
+                showResult('error', `❌ Error: ${error.message}`);
+            } finally {
+                updateButton(button, false);
+            }
+        }
+
+        async function testUpdate() {
+            const button = event.target;
+            
+            if (!window.testRecordId) {
+                showResult('warning', '⚠️ Primero ejecute la prueba de escritura para obtener un ID de registro.');
+                return;
+            }
+            
+            updateButton(button, true);
+            
+            try {
+                const response = await fetch('/.netlify/functions/update-request', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id: window.testRecordId,
+                        status: 'Aprobado'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                updateDebug({ test: 'update', request: { id: window.testRecordId, status: 'Aprobado' }, response: data });
+                
+                if (response.ok && data.success) {
+                    showResult('success', '✅ Actualización exitosa. Estado cambiado a "Aprobado".');
+                } else {
+                    showResult('error', `❌ Error actualizando: ${data.error}`);
+                }
+            } catch (error) {
+                showResult('error', `❌ Error: ${error.message}`);
+            } finally {
+                updateButton(button, false);
+            }
+        }
+
+        // Ejecutar diagnóstico automáticamente al cargar
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const diagnosticBtn = document.querySelector('button[onclick="runDiagnostic()"]');
+                if (diagnosticBtn) {
+                    diagnosticBtn.click();
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
