@@ -57,6 +57,14 @@
 .header p {
     font-size: 1.2em;
     opacity: 0.9;
+    margin-bottom: 5px;
+}
+
+.developer-info {
+    font-size: 0.9em;
+    opacity: 0.8;
+    font-style: italic;
+    margin-top: 5px;
 }
 
 @media (max-width: 768px) {
@@ -393,8 +401,9 @@
     <div class="header-content">
         <img src="logo-hslv.png" alt="Hospital Susana López" class="header-logo">
         <div class="header-text">
-            <h1> Hospital Susana López</h1>
+            <h1>Hospital Susana López</h1>
             <p>Sistema de Solicitud de Mobiliario</p>
+            <div class="developer-info">Desarrollado por: Ing. Paul Eduardo Muñoz R.</div>
         </div>
     </div>
 </div>
@@ -464,7 +473,7 @@
 
                 <div class="tabs">
                     <button type="button" class="tab active" onclick="changeTab('administrativo')">
-                        📁 Mobiliario Administrativo
+                        📄 Mobiliario Administrativo
                     </button>
                     <button type="button" class="tab" onclick="changeTab('medico')">
                         🏥 Mobiliario Médico
