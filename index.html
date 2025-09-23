@@ -753,7 +753,7 @@
         document.getElementById('fecha').valueAsDate = new Date();
 
         function changeTab(event, tab) {
-            event.preventDefault(); // Prevenir el comportamiento por defecto
+            event.preventDefault();
             currentTab = tab;
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             event.target.classList.add('active');
@@ -771,7 +771,9 @@
             const grid = document.getElementById('itemsGrid');
             grid.innerHTML = filteredItems.map(item => `
                 <div class="item-card ${selectedItems[item.id] ? 'selected' : ''}" onclick="toggleItem(${item.id})">
-                    <input type="checkbox" class="item-checkbox" ${selectedItems[item.id] ? 'checked' : ''} onclick="event.stopPropagation()">
+                    <input type="checkbox" class="item-checkbox" 
+                           ${selectedItems[item.id] ? 'checked' : ''} 
+                           onclick="handleCheckboxClick(event, ${item.id})">
                     <div class="item-info">
                         <div class="item-name">${item.nombre}</div>
                         <div class="item-specs">${item.caracteristicas}</div>
@@ -785,6 +787,12 @@
                     </div>
                 </div>
             `).join('');
+        }
+
+        // Nueva función para manejar el click en el checkbox
+        function handleCheckboxClick(event, itemId) {
+            event.stopPropagation(); // Detener la propagación para evitar doble toggle
+            toggleItem(itemId);
         }
 
         function toggleItem(itemId) {
