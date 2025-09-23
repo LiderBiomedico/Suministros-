@@ -27,61 +27,64 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             overflow: hidden;
         }
-.header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 30px;
-    text-align: center;
-}
 
-.header-content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-}
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
 
-.header-logo {
-    max-width: 80px;
-    height: auto;
-}
-.header-text {
-    text-align: left;
-}
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
 
-.header h1 {
-    font-size: 2.5em;
-    margin-bottom: 10px;
-}
+        .header-logo {
+            max-width: 80px;
+            height: auto;
+        }
 
-.header p {
-    font-size: 1.2em;
-    opacity: 0.9;
-    margin-bottom: 5px;
-}
+        .header-text {
+            text-align: left;
+        }
 
-.developer-info {
-    font-size: 0.9em;
-    opacity: 0.8;
-    font-style: italic;
-    margin-top: 5px;
-}
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
 
-@media (max-width: 768px) {
-    .header-content {
-        flex-direction: column;
-        text-align: center;
-    }
-    
-    .header-text {
-        text-align: center;
-    }
-    
-    .header h1 {
-        font-size: 2em;
-    }
-}
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .developer-info {
+            font-size: 0.9em;
+            opacity: 0.8;
+            font-style: italic;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .header-text {
+                text-align: center;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+
         .form-section {
             padding: 40px;
             background: white;
@@ -398,16 +401,16 @@
 </head>
 <body>
     <div class="container">
-       <div class="header">
-    <div class="header-content">
-        <img src="logo-hslv.png" alt="Hospital Susana López" class="header-logo">
-        <div class="header-text">
-            <h1>Hospital Susana López</h1>
-            <p>Sistema de Solicitud de Mobiliario</p>
-            <div class="developer-info">Desarrollado por: Ing. Paul Eduardo Muñoz R.</div>
+        <div class="header">
+            <div class="header-content">
+                <img src="logo-hslv.png" alt="Hospital Susana López" class="header-logo">
+                <div class="header-text">
+                    <h1>Hospital Susana López</h1>
+                    <p>Sistema de Solicitud de Mobiliario</p>
+                    <div class="developer-info">Desarrollado por: Ing. Paul Eduardo Muñoz R.</div>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
 
         <div class="form-section">
             <div class="success-message" id="successMessage">
@@ -424,7 +427,7 @@
                         <select id="servicio" required>
                             <option value="">Seleccione un servicio</option>
                             <option value="urgencias adulto">Urgencias Adulto</option>
-			    <option value="urgencias pediatria">Urgencias Pediatria</option>
+                            <option value="urgencias pediatria">Urgencias Pediatría</option>
                             <option value="pediatria">Pediatría</option>
                             <option value="ginecologia">Ginecología</option>
                             <option value="medicina_interna">Medicina Interna</option>
@@ -437,57 +440,52 @@
                             <option value="mantenimiento">Mantenimiento</option>
                             <option value="recursos_humanos">Recursos Humanos</option>
                             <option value="contabilidad">Contabilidad</option>
-			    <option value="planeacion">Planeacion</option>
-		            <option value="talento humano">Talento Humano</option>
-			    <option value="responsabilidad social">Responsabilidad Social</option>
-			    <option value="investigación ID">Investigación ID</option>
-		            <option value="recursos ambientales">Recursos Ambientales</option>
-			    <option value="pagaduria y caja">Pagaduria y Caja</option>
-		            <option value="presupuesto">Presupuesto</option>
-			    <option value="ambulatorio">Ambulatorio</option>
-			    <option value="apoyo a la supervición">Apoyo a la Supervición</option>
-		            <option value="auditoría">Auditoría</option>
-			    <option value="bloque adultos">Bloque Adultos</option>
-			    <option value="cirugia">Cirugia</option>
-			    <option value="control interno disiplinario">Control Interno Disiplinario</option>
-			    <option value="costos">Costos</option>
-			    <option value="enfermeria">Enfermeria</option>
-		            <option value="epidemiologia">Epidemiologia</option>
-			    <option value="esterilización">Esterilización</option>
-			    <option value="facturación">Facturación</option>
-			    <option value="gestión documental">Gestión Documental</option>
-			    <option value="enfermeria">Enfermeria</option>
-		            <option value="gestión clinica">Gestión Clinica</option>
-			    <option value="hospitalización adultos">Hospitalización Adultos</option>
-		            <option value="iamii">IAMMI</option>
-			    <option value="imagenes dx">Imagenes Dx</option>
-			    <option value="juridica">Juridica</option>
-			    <option value="referencia">Referencia</option>
-			    <option value="enfermeria">Enfermeria</option>
-		            <option value="siau">Siau</option>
-			    <option value="servicios generales">Servicios Generales</option>
-			    <option value="sistemas">Sistemas</option>
-			    <option value="sst">SST</option>
-		            <option value="terapia respiratoria">Terapia Respiratoria</option>
-			    <option value="ucinp">UCINP</option>
-		            <option value="umi">UMI</option>
-			    <option value="subdirección cientifica">Subdirección Cientifica</option>
-			    <option value="subdirección administrativa">Subdirección Administrativa</option>
-			    <option value="farmacia">Farmacia</option>
-			    <option value="tesoreria">Tesoreria</option>
-		            <option value="ingenieria biomedica">Ingenieria Biomedica</option>
-			    <option value="docencia">Docencia</option>
-		            <option value="gestión de clientes y mercado">Gestión de Clientes y Mercado</option>
-		           <option value="infraestructura">Infraestructura</option>
-
-				
+                            <option value="planeacion">Planeación</option>
+                            <option value="talento humano">Talento Humano</option>
+                            <option value="responsabilidad social">Responsabilidad Social</option>
+                            <option value="investigación ID">Investigación ID</option>
+                            <option value="recursos ambientales">Recursos Ambientales</option>
+                            <option value="pagaduria y caja">Pagaduría y Caja</option>
+                            <option value="presupuesto">Presupuesto</option>
+                            <option value="ambulatorio">Ambulatorio</option>
+                            <option value="apoyo a la supervisión">Apoyo a la Supervisión</option>
+                            <option value="auditoría">Auditoría</option>
+                            <option value="bloque adultos">Bloque Adultos</option>
+                            <option value="cirugia">Cirugía</option>
+                            <option value="control interno disciplinario">Control Interno Disciplinario</option>
+                            <option value="costos">Costos</option>
+                            <option value="enfermeria">Enfermería</option>
+                            <option value="epidemiologia">Epidemiología</option>
+                            <option value="esterilización">Esterilización</option>
+                            <option value="facturación">Facturación</option>
+                            <option value="gestión documental">Gestión Documental</option>
+                            <option value="gestión clinica">Gestión Clínica</option>
+                            <option value="hospitalización adultos">Hospitalización Adultos</option>
+                            <option value="iamii">IAMII</option>
+                            <option value="imagenes dx">Imágenes Dx</option>
+                            <option value="juridica">Jurídica</option>
+                            <option value="referencia">Referencia</option>
+                            <option value="siau">SIAU</option>
+                            <option value="servicios generales">Servicios Generales</option>
+                            <option value="sistemas">Sistemas</option>
+                            <option value="sst">SST</option>
+                            <option value="terapia respiratoria">Terapia Respiratoria</option>
+                            <option value="ucinp">UCINP</option>
+                            <option value="umi">UMI</option>
+                            <option value="subdirección cientifica">Subdirección Científica</option>
+                            <option value="subdirección administrativa">Subdirección Administrativa</option>
+                            <option value="tesoreria">Tesorería</option>
+                            <option value="ingenieria biomedica">Ingeniería Biomédica</option>
+                            <option value="docencia">Docencia</option>
+                            <option value="gestión de clientes y mercado">Gestión de Clientes y Mercado</option>
+                            <option value="infraestructura">Infraestructura</option>
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label for="solicitante">Nombre del Solicitante *</label>
                         <input type="text" id="solicitante" required>
-                    </div> 
+                    </div>
 
                     <div class="form-group">
                         <label for="cargo">Cargo *</label>
@@ -516,10 +514,10 @@
                 </div>
 
                 <div class="tabs">
-                    <button type="button" class="tab active" onclick="changeTab('administrativo')">
+                    <button type="button" class="tab active" onclick="changeTab(event, 'administrativo')">
                         📄 Mobiliario Administrativo
                     </button>
-                    <button type="button" class="tab" onclick="changeTab('medico')">
+                    <button type="button" class="tab" onclick="changeTab(event, 'medico')">
                         🏥 Mobiliario Médico
                     </button>
                 </div>
@@ -554,11 +552,7 @@
     </div>
 
     <script>
-        // IMPORTANTE: Eliminar estas líneas en producción - usar variables de entorno en Netlify
-        // const AIRTABLE_API_KEY = 'TU_API_KEY';
-        // const AIRTABLE_BASE_ID = 'TU_BASE_ID';
-
-       // Datos de mobiliario
+        // Datos de mobiliario
         const mobiliarioAdministrativo = [
             // Archivadores
             { id: 1, nombre: "ARCHIVADOR AÉREO 3 ESPACIOS", caracteristicas: "Con 3 espacios para documentos", categoria: "administrativo" },
@@ -652,48 +646,48 @@
             { id: 71, nombre: "RELOJ DE PARED GRANDE", caracteristicas: "Reloj de pared de tamaño grande para oficina", categoria: "administrativo" }
         ];
 
-       const mobiliarioMedico = [
+        const mobiliarioMedico = [
             // A
-            { id: 101, nombre: "Algodonera hospitalaria", caracteristicas: "En acero inoxidable pequeÃ±a", categoria: "medico" },
-            { id: 102, nombre: "Armario mediano plÃ¡stico", caracteristicas: "Gris Hielo- Negro, de dos puertas con entrepaÃ±os internos", categoria: "medico" },
+            { id: 101, nombre: "Algodonera hospitalaria", caracteristicas: "En acero inoxidable pequeña", categoria: "medico" },
+            { id: 102, nombre: "Armario mediano plástico", caracteristicas: "Gris Hielo- Negro, de dos puertas con entrepaños internos", categoria: "medico" },
             { id: 103, nombre: "Atril de pared", caracteristicas: "En acero inoxidable", categoria: "medico" },
-            { id: 104, nombre: "Atril de piso", caracteristicas: "Porta Suero En Acero Inoxidable - Para Bomba De InfusiÃ³n", categoria: "medico" },
+            { id: 104, nombre: "Atril de piso", caracteristicas: "Porta Suero En Acero Inoxidable - Para Bomba De Infusión", categoria: "medico" },
             
             // B
-            { id: 105, nombre: "BALONES BOBATH MEDIANOS", caracteristicas: "Para rehabilitaciÃ³n fÃ­sica", categoria: "medico" },
-            { id: 106, nombre: "BÃ¡scula", caracteristicas: "BÃ¡scula Brazo Plegable 300kg, 69,5 largo x 45 ancho", categoria: "medico" },
+            { id: 105, nombre: "BALONES BOBATH MEDIANOS", caracteristicas: "Para rehabilitación física", categoria: "medico" },
+            { id: 106, nombre: "Báscula", caracteristicas: "Báscula Brazo Plegable 300kg, 69,5 largo x 45 ancho", categoria: "medico" },
             { id: 107, nombre: "BASCULA PARA ADULTOS", caracteristicas: "Capacidad hasta 200kg", categoria: "medico" },
-            { id: 108, nombre: "BASCULA PEDIATRICA", caracteristicas: "Digital con tallÃ­metro incorporado, capacidad hasta 20kg", categoria: "medico" },
+            { id: 108, nombre: "BASCULA PEDIATRICA", caracteristicas: "Digital con tallímetro incorporado, capacidad hasta 20kg", categoria: "medico" },
             { id: 109, nombre: "Bebedero de agua pedestal", caracteristicas: "Alto 105 cm x Ancho 38 cm x Prof. 38 cm con filtro", categoria: "medico" },
             
             // C
             { id: 110, nombre: "CAMILLA DE TRANSPORTE", caracteristicas: "Con ruedas y barandas laterales", categoria: "medico" },
             { id: 111, nombre: "CAMILLA GINECOLOGICA", caracteristicas: "Con estribos ajustables y respaldo reclinable", categoria: "medico" },
             { id: 112, nombre: "CAMILLA PEDIATRICA", caracteristicas: "Con barandas laterales abatibles, ajustable en altura", categoria: "medico" },
-            { id: 113, nombre: "CARRO DE CURACIONES", caracteristicas: "En acero inoxidable con mÃºltiples niveles", categoria: "medico" },
+            { id: 113, nombre: "CARRO DE CURACIONES", caracteristicas: "En acero inoxidable con múltiples niveles", categoria: "medico" },
             { id: 114, nombre: "CARRO DE MEDICAMENTOS", caracteristicas: "Con gavetas y cerradura de seguridad, acero inoxidable", categoria: "medico" },
             { id: 115, nombre: "CARRO DE PARO", caracteristicas: "Equipado con desfibrilador, medicamentos y equipo de emergencia", categoria: "medico" },
             { id: 116, nombre: "CARRO HOSPITALARIO MULTIUSOS", caracteristicas: "En acero inoxidable con 3 niveles y ruedas con freno", categoria: "medico" },
             { id: 117, nombre: "CARRO PARA ROPA SUCIA", caracteristicas: "En acero inoxidable con tapa y pedal", categoria: "medico" },
             { id: 118, nombre: "CARRO PARA TRANSPORTE DE HISTORIAS CLINICAS", caracteristicas: "Con divisiones y cerradura de seguridad", categoria: "medico" },
             { id: 119, nombre: "CUNA HOSPITALARIA", caracteristicas: "Con barandas laterales abatibles y colchoneta", categoria: "medico" },
-            { id: 120, nombre: "CUNA PARA RECIEN NACIDO", caracteristicas: "En acrÃ­lico transparente con base rodante", categoria: "medico" },
+            { id: 120, nombre: "CUNA PARA RECIEN NACIDO", caracteristicas: "En acrílico transparente con base rodante", categoria: "medico" },
             
             // D - E
-            { id: 121, nombre: "DESFIBRILADOR PORTATIL", caracteristicas: "Con baterÃ­a recargable y electrodos", categoria: "medico" },
-            { id: 122, nombre: "DISPENSADOR DE JABON QUIRURGICO", caracteristicas: "AutomÃ¡tico con sensor, acero inoxidable", categoria: "medico" },
-            { id: 123, nombre: "ESCALERILLA DE DOS PELDAÃ'OS", caracteristicas: "Antideslizante en acero inoxidable", categoria: "medico" },
+            { id: 121, nombre: "DESFIBRILADOR PORTATIL", caracteristicas: "Con batería recargable y electrodos", categoria: "medico" },
+            { id: 122, nombre: "DISPENSADOR DE JABON QUIRURGICO", caracteristicas: "Automático con sensor, acero inoxidable", categoria: "medico" },
+            { id: 123, nombre: "ESCALERILLA DE DOS PELDAÑOS", caracteristicas: "Antideslizante en acero inoxidable", categoria: "medico" },
             { id: 124, nombre: "ESTANTE PARA MEDICAMENTOS", caracteristicas: "En acero inoxidable con puertas de vidrio y cerradura", categoria: "medico" },
-            { id: 125, nombre: "ESTERILIZADOR UV", caracteristicas: "Para instrumental mÃ©dico pequeÃ±o", categoria: "medico" },
+            { id: 125, nombre: "ESTERILIZADOR UV", caracteristicas: "Para instrumental médico pequeño", categoria: "medico" },
             
             // G - I
-            { id: 126, nombre: "GRADILLA METALICA", caracteristicas: "De dos peldaÃ±os con superficie antideslizante", categoria: "medico" },
-            { id: 127, nombre: "HAMACA PARA PESAJE", caracteristicas: "Para bebÃ©s, en tela lavable", categoria: "medico" },
+            { id: 126, nombre: "GRADILLA METALICA", caracteristicas: "De dos peldaños con superficie antideslizante", categoria: "medico" },
+            { id: 127, nombre: "HAMACA PARA PESAJE", caracteristicas: "Para bebés, en tela lavable", categoria: "medico" },
             { id: 128, nombre: "INCUBADORA NEONATAL", caracteristicas: "Con control de temperatura y humedad", categoria: "medico" },
-            { id: 129, nombre: "INFANTOMETRO", caracteristicas: "Para mediciÃ³n de longitud en bebÃ©s, portatil", categoria: "medico" },
+            { id: 129, nombre: "INFANTOMETRO", caracteristicas: "Para medición de longitud en bebés, portátil", categoria: "medico" },
             
             // L - M
-            { id: 130, nombre: "LAMPARA CIELITICA", caracteristicas: "LED para quirÃ³fano con brazo articulado", categoria: "medico" },
+            { id: 130, nombre: "LAMPARA CIELITICA", caracteristicas: "LED para quirófano con brazo articulado", categoria: "medico" },
             { id: 131, nombre: "LAMPARA DE EXAMEN", caracteristicas: "Cuello de ganso con base rodante", categoria: "medico" },
             { id: 132, nombre: "LAVAMANOS QUIRURGICO", caracteristicas: "En acero inoxidable con pedal o sensor", categoria: "medico" },
             { id: 133, nombre: "MESA DE MAYO", caracteristicas: "En acero inoxidable con altura ajustable", categoria: "medico" },
@@ -701,54 +695,54 @@
             { id: 135, nombre: "MESA GINECOLOGICA", caracteristicas: "Con pierneras ajustables y gaveta para instrumental", categoria: "medico" },
             { id: 136, nombre: "MESA PARA INSTRUMENTAL", caracteristicas: "En acero inoxidable con bordes elevados", categoria: "medico" },
             { id: 137, nombre: "MESA PUENTE", caracteristicas: "Ajustable para cama hospitalaria", categoria: "medico" },
-            { id: 138, nombre: "MONITOR DE SIGNOS VITALES", caracteristicas: "MultiparÃ¡metro con soporte rodante", categoria: "medico" },
-            { id: 139, nombre: "MUEBLE PARA ARCHIVO DE HISTORIAS", caracteristicas: "MetÃ¡lico con divisiones alfabÃ©ticas", categoria: "medico" },
+            { id: 138, nombre: "MONITOR DE SIGNOS VITALES", caracteristicas: "Multiparámetro con soporte rodante", categoria: "medico" },
+            { id: 139, nombre: "MUEBLE PARA ARCHIVO DE HISTORIAS", caracteristicas: "Metálico con divisiones alfabéticas", categoria: "medico" },
             
             // N - P
-            { id: 140, nombre: "NEGATOSCOPIO", caracteristicas: "De un cuerpo LED para radiografÃ­as", categoria: "medico" },
-            { id: 141, nombre: "NEGATOSCOPIO DOBLE", caracteristicas: "De dos cuerpos LED para radiografÃ­as", categoria: "medico" },
-            { id: 142, nombre: "ORGANIZADOR DE MEDICAMENTOS", caracteristicas: "Con divisiones por horario y dÃ­a", categoria: "medico" },
-            { id: 143, nombre: "PAPELERA HOSPITALARIA", caracteristicas: "Con pedal y tapa, para residuos biolÃ³gicos", categoria: "medico" },
+            { id: 140, nombre: "NEGATOSCOPIO", caracteristicas: "De un cuerpo LED para radiografías", categoria: "medico" },
+            { id: 141, nombre: "NEGATOSCOPIO DOBLE", caracteristicas: "De dos cuerpos LED para radiografías", categoria: "medico" },
+            { id: 142, nombre: "ORGANIZADOR DE MEDICAMENTOS", caracteristicas: "Con divisiones por horario y día", categoria: "medico" },
+            { id: 143, nombre: "PAPELERA HOSPITALARIA", caracteristicas: "Con pedal y tapa, para residuos biológicos", categoria: "medico" },
             { id: 144, nombre: "PARAVAN O BIOMBO", caracteristicas: "De tres cuerpos con ruedas", categoria: "medico" },
             { id: 145, nombre: "PERCHERO HOSPITALARIO", caracteristicas: "En acero inoxidable con base pesada", categoria: "medico" },
-            { id: 146, nombre: "PESA BEBES", caracteristicas: "Digital con funciÃ³n de tara", categoria: "medico" },
+            { id: 146, nombre: "PESA BEBES", caracteristicas: "Digital con función de tara", categoria: "medico" },
             { id: 147, nombre: "PIPETA O PATO", caracteristicas: "En acero inoxidable para pacientes", categoria: "medico" },
             { id: 148, nombre: "PORTASUEROS", caracteristicas: "De dos ganchos con base de cinco ruedas", categoria: "medico" },
             
             // R - S
             { id: 149, nombre: "REFRIGERADOR PARA VACUNAS", caracteristicas: "Con control de temperatura y alarma", categoria: "medico" },
-            { id: 150, nombre: "RESUCITADOR MANUAL", caracteristicas: "AmbÃº adulto/pediÃ¡trico con mascarillas", categoria: "medico" },
-            { id: 151, nombre: "RIÃONERA", caracteristicas: "En acero inoxidable de diferentes tamaÃ±os", categoria: "medico" },
-            { id: 152, nombre: "SILLA DE RUEDAS ESTANDAR", caracteristicas: "Plegable con apoyapiÃ©s removibles", categoria: "medico" },
-            { id: 153, nombre: "SILLA DE RUEDAS PEDIATRICA", caracteristicas: "TamaÃ±o ajustable para niÃ±os", categoria: "medico" },
+            { id: 150, nombre: "RESUCITADOR MANUAL", caracteristicas: "Ambú adulto/pediátrico con mascarillas", categoria: "medico" },
+            { id: 151, nombre: "RIÑONERA", caracteristicas: "En acero inoxidable de diferentes tamaños", categoria: "medico" },
+            { id: 152, nombre: "SILLA DE RUEDAS ESTANDAR", caracteristicas: "Plegable con apoyapiés removibles", categoria: "medico" },
+            { id: 153, nombre: "SILLA DE RUEDAS PEDIATRICA", caracteristicas: "Tamaño ajustable para niños", categoria: "medico" },
             { id: 154, nombre: "SILLA PARA TOMA DE MUESTRAS", caracteristicas: "Con apoyabrazos acolchados", categoria: "medico" },
             { id: 155, nombre: "SOPORTE PARA BALON DE OXIGENO", caracteristicas: "Con ruedas y sujetador de seguridad", categoria: "medico" },
             
             // T - V
-            { id: 156, nombre: "TABLA DE REANIMACION", caracteristicas: "RÃ­gida para RCP", categoria: "medico" },
-            { id: 157, nombre: "TABLON ESPINAL", caracteristicas: "Con inmovilizadores y cintas de sujreciÃ³n", categoria: "medico" },
-            { id: 158, nombre: "TANQUE DE OXIGENO PORTATIL", caracteristicas: "Con manÃ³metro y regulador", categoria: "medico" },
+            { id: 156, nombre: "TABLA DE REANIMACION", caracteristicas: "Rígida para RCP", categoria: "medico" },
+            { id: 157, nombre: "TABLON ESPINAL", caracteristicas: "Con inmovilizadores y cintas de sujeción", categoria: "medico" },
+            { id: 158, nombre: "TANQUE DE OXIGENO PORTATIL", caracteristicas: "Con manómetro y regulador", categoria: "medico" },
             { id: 159, nombre: "TENSOMETRO DE PARED", caracteristicas: "Aneroide con canastilla", categoria: "medico" },
-            { id: 160, nombre: "TENSOMETRO DIGITAL", caracteristicas: "AutomÃ¡tico de brazo con memoria", categoria: "medico" },
-            { id: 161, nombre: "TERMOMETRO INFRARROJO", caracteristicas: "Sin contacto para mediciÃ³n rÃ¡pida", categoria: "medico" },
+            { id: 160, nombre: "TENSOMETRO DIGITAL", caracteristicas: "Automático de brazo con memoria", categoria: "medico" },
+            { id: 161, nombre: "TERMOMETRO INFRARROJO", caracteristicas: "Sin contacto para medición rápida", categoria: "medico" },
             { id: 162, nombre: "TORRE ENDOSCOPICA", caracteristicas: "Con monitor y sistema de video", categoria: "medico" },
-            { id: 163, nombre: "TRIPODE PORTA BOLSA", caracteristicas: "Para bolsas de diÃ¡lisis", categoria: "medico" },
+            { id: 163, nombre: "TRIPODE PORTA BOLSA", caracteristicas: "Para bolsas de diálisis", categoria: "medico" },
             { id: 164, nombre: "VENTILADOR MECANICO", caracteristicas: "Para soporte respiratorio en UCI", categoria: "medico" },
             { id: 165, nombre: "VITRINA PARA MEDICAMENTOS", caracteristicas: "Con llave y estantes ajustables", categoria: "medico" },
             
             // Equipamiento especializado
-            { id: 166, nombre: "ASPIRADOR DE SECRECIONES", caracteristicas: "PortÃ¡til con regulador de succiÃ³n", categoria: "medico" },
-            { id: 167, nombre: "BOMBA DE INFUSION", caracteristicas: "ProgramÃ¡tica con alarmas de seguridad", categoria: "medico" },
+            { id: 166, nombre: "ASPIRADOR DE SECRECIONES", caracteristicas: "Portátil con regulador de succión", categoria: "medico" },
+            { id: 167, nombre: "BOMBA DE INFUSION", caracteristicas: "Programática con alarmas de seguridad", categoria: "medico" },
             { id: 168, nombre: "CAMA HOSPITALARIA ELECTRICA", caracteristicas: "Con control remoto y barandas laterales", categoria: "medico" },
-            { id: 169, nombre: "CAMA HOSPITALARIA MANUAL", caracteristicas: "De tres manivelas con colchÃ³n antiescaras", categoria: "medico" },
+            { id: 169, nombre: "CAMA HOSPITALARIA MANUAL", caracteristicas: "De tres manivelas con colchón antiescaras", categoria: "medico" },
             { id: 170, nombre: "ELECTROCARDIOGRAFO", caracteristicas: "De 12 derivaciones con impresora", categoria: "medico" },
             { id: 171, nombre: "GLUCOMETRO", caracteristicas: "Digital con tiras reactivas", categoria: "medico" },
-            { id: 172, nombre: "LARINGOSCOPIO", caracteristicas: "Con hojas intercambiables adulto/pediÃ¡trico", categoria: "medico" },
-            { id: 173, nombre: "NEBULIZADOR", caracteristicas: "De compresor con mascarilla adulto/pediÃ¡trico", categoria: "medico" },
-            { id: 174, nombre: "OTOSCOPIO", caracteristicas: "Con especulos de diferentes tamaÃ±os", categoria: "medico" },
+            { id: 172, nombre: "LARINGOSCOPIO", caracteristicas: "Con hojas intercambiables adulto/pediátrico", categoria: "medico" },
+            { id: 173, nombre: "NEBULIZADOR", caracteristicas: "De compresor con mascarilla adulto/pediátrico", categoria: "medico" },
+            { id: 174, nombre: "OTOSCOPIO", caracteristicas: "Con especulos de diferentes tamaños", categoria: "medico" },
             { id: 175, nombre: "OXIMETRO DE PULSO", caracteristicas: "Digital con alarma de SpO2", categoria: "medico" },
             { id: 176, nombre: "PULSIOXIMETRO DE MESA", caracteristicas: "Con registro continuo y alarmas", categoria: "medico" },
-            { id: 177, nombre: "REFRIGERADOR PARA BANCO DE SANGRE", caracteristicas: "Con control de temperatura 2-6Â°C", categoria: "medico" },
+            { id: 177, nombre: "REFRIGERADOR PARA BANCO DE SANGRE", caracteristicas: "Con control de temperatura 2-6°C", categoria: "medico" },
             { id: 178, nombre: "ULTRASONIDO PORTATIL", caracteristicas: "Con transductores intercambiables", categoria: "medico" }
         ];
 
@@ -758,7 +752,8 @@
         // Inicializar fecha actual
         document.getElementById('fecha').valueAsDate = new Date();
 
-        function changeTab(tab) {
+        function changeTab(event, tab) {
+            event.preventDefault(); // Prevenir el comportamiento por defecto
             currentTab = tab;
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             event.target.classList.add('active');
@@ -776,16 +771,17 @@
             const grid = document.getElementById('itemsGrid');
             grid.innerHTML = filteredItems.map(item => `
                 <div class="item-card ${selectedItems[item.id] ? 'selected' : ''}" onclick="toggleItem(${item.id})">
-                    <input type="checkbox" class="item-checkbox" ${selectedItems[item.id] ? 'checked' : ''}>
+                    <input type="checkbox" class="item-checkbox" ${selectedItems[item.id] ? 'checked' : ''} onclick="event.stopPropagation()">
                     <div class="item-info">
                         <div class="item-name">${item.nombre}</div>
                         <div class="item-specs">${item.caracteristicas}</div>
                     </div>
                     <div class="item-quantity" onclick="event.stopPropagation()">
-                        <button class="quantity-btn" onclick="decreaseQuantity(${item.id})">-</button>
+                        <button type="button" class="quantity-btn" onclick="decreaseQuantity(event, ${item.id})">-</button>
                         <input type="number" class="quantity-input" id="qty-${item.id}" 
-                               value="${selectedItems[item.id]?.cantidad || 1}" min="1">
-                        <button class="quantity-btn" onclick="increaseQuantity(${item.id})">+</button>
+                               value="${selectedItems[item.id]?.cantidad || 1}" min="1"
+                               onchange="updateQuantity(${item.id}, this.value)">
+                        <button type="button" class="quantity-btn" onclick="increaseQuantity(event, ${item.id})">+</button>
                     </div>
                 </div>
             `).join('');
@@ -808,7 +804,9 @@
             updateSelectedItemsList();
         }
 
-        function increaseQuantity(itemId) {
+        function increaseQuantity(event, itemId) {
+            event.preventDefault();
+            event.stopPropagation();
             const input = document.getElementById(`qty-${itemId}`);
             input.value = parseInt(input.value) + 1;
             if (selectedItems[itemId]) {
@@ -817,7 +815,9 @@
             }
         }
 
-        function decreaseQuantity(itemId) {
+        function decreaseQuantity(event, itemId) {
+            event.preventDefault();
+            event.stopPropagation();
             const input = document.getElementById(`qty-${itemId}`);
             if (parseInt(input.value) > 1) {
                 input.value = parseInt(input.value) - 1;
@@ -825,6 +825,13 @@
                     selectedItems[itemId].cantidad = parseInt(input.value);
                     updateSelectedItemsList();
                 }
+            }
+        }
+
+        function updateQuantity(itemId, value) {
+            if (selectedItems[itemId]) {
+                selectedItems[itemId].cantidad = parseInt(value) || 1;
+                updateSelectedItemsList();
             }
         }
 
@@ -838,7 +845,7 @@
                 list.innerHTML = selectedArray.map(item => `
                     <div class="selected-item">
                         <span>${item.nombre} - Cantidad: ${item.cantidad}</span>
-                        <button class="remove-btn" onclick="removeItem(${item.id})">Eliminar</button>
+                        <button type="button" class="remove-btn" onclick="removeItem(${item.id})">Eliminar</button>
                     </div>
                 `).join('');
             } else {
@@ -852,9 +859,10 @@
             updateSelectedItemsList();
         }
 
+        // Event listener para búsqueda
         document.getElementById('searchInput').addEventListener('input', loadItems);
 
-        // IMPORTANTE: Usar función de Netlify en lugar de llamada directa a Airtable
+        // Manejo del formulario
         document.getElementById('requerimientoForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
