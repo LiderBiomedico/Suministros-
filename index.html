@@ -4,10 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Solicitud de Mobiliario - Hospital Susana López</title>
-    
-    <!-- Favicon corregido -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏥</text></svg>">
-    
     <style>
         * {
             margin: 0;
@@ -557,7 +554,11 @@
     </div>
 
     <script>
-        // Datos de mobiliario
+        // IMPORTANTE: Eliminar estas líneas en producción - usar variables de entorno en Netlify
+        // const AIRTABLE_API_KEY = 'TU_API_KEY';
+        // const AIRTABLE_BASE_ID = 'TU_BASE_ID';
+
+       // Datos de mobiliario
         const mobiliarioAdministrativo = [
             // Archivadores
             { id: 1, nombre: "ARCHIVADOR AÉREO 3 ESPACIOS", caracteristicas: "Con 3 espacios para documentos", categoria: "administrativo" },
@@ -595,4 +596,336 @@
             // Lockers
             { id: 26, nombre: "LOCKERS 4 PUESTOS", caracteristicas: "Para 4 puestos entre 180 y 200 cm de altura. En lámina cold rolled reforzado color gris con pintura electrostática y sus respectivas puertas abatibles", categoria: "administrativo" },
             { id: 27, nombre: "LOCKERS 9 PUESTOS", caracteristicas: "Lockers de 9 puestos con puertas individuales y cerraduras", categoria: "administrativo" },
-            { id: 28, nombre: "
+            { id: 28, nombre: "LOCKERS TORRE X 4", caracteristicas: "Lockers tipo torre para 4 usuarios", categoria: "administrativo" },
+            
+            // Mesas
+            { id: 29, nombre: "MESA CAFETÍN", caracteristicas: "Mesa para área de cafetería o comedor", categoria: "administrativo" },
+            { id: 30, nombre: "MESA PARA IMPRESORA", caracteristicas: "Mesa específica para colocar impresora", categoria: "administrativo" },
+            { id: 31, nombre: "MESA PARA SCANNER CON CAJÓN", caracteristicas: "Mesa con cajón diseñada para scanner", categoria: "administrativo" },
+            { id: 32, nombre: "CUBIERTA PLEGABLE PARA COMEDOR", caracteristicas: "Medidas de 120cmx50cm con cubierta en RH de fácil limpieza color blanco y estructura metálica cold rolled color gris", categoria: "administrativo" },
+            
+            // Modulares
+            { id: 33, nombre: "MODULAR 2 PUESTOS", caracteristicas: "Mobiliario modular para 2 puestos de trabajo", categoria: "administrativo" },
+            { id: 34, nombre: "MODULAR 3 PUESTOS", caracteristicas: "Mobiliario modular para 3 puestos de trabajo", categoria: "administrativo" },
+            { id: 35, nombre: "MODULAR AÉREO 85x70x30", caracteristicas: "Medidas de 85cmx70cmx30cm de fácil limpieza color blanco, con divisiones verticales internas cada 10 cm, con puerta abatible hacia arriba", categoria: "administrativo" },
+            { id: 36, nombre: "MODULAR AÉREO 150x75x40", caracteristicas: "150cmx75cmx40cm de fácil limpieza color blanco, con entrepaños y puerta abatible", categoria: "administrativo" },
+            { id: 37, nombre: "MODULAR AÉREO 135x60x30", caracteristicas: "Medidas de 135cmx60cmx30cm con de fácil limpieza color blanco, con divisiones horizontales y verticales", categoria: "administrativo" },
+            { id: 38, nombre: "MODULAR AÉREO DOBLE CUERPO", caracteristicas: "Medidas de 173cmx70cmx30cm con de fácil limpieza color blanco, en dos cuerpos con tres espacios internos cada uno", categoria: "administrativo" },
+            { id: 39, nombre: "MODULAR ALMACENAMIENTO SUMINISTROS", caracteristicas: "Medidas de 90cmx230cmx40cm de fácil limpieza color blanco, con 4 puertas en cruz y una abatible con apertura hacia arriba", categoria: "administrativo" },
+            { id: 40, nombre: "MODULAR CON RODACHINES", caracteristicas: "Medidas de 50cmx130cmx40cm de fácil limpieza color blanco, con rodachines con seguro para freno y compartimiento para documentos", categoria: "administrativo" },
+            { id: 41, nombre: "MODULAR 12 GAVETAS", caracteristicas: "Medidas de 90cmx198cmx60cm de fácil limpieza color blanco, con 12 gavetas distribuidas de manera vertical", categoria: "administrativo" },
+            { id: 42, nombre: "MODULAR GRANDE CON LOCKERS", caracteristicas: "Medidas de 160cmx280cmx60cm de fácil limpieza color blanco, con espacio para almacenamiento de documentos y Lockers", categoria: "administrativo" },
+            { id: 43, nombre: "MODULAR CON GAVETAS 60x100x60", caracteristicas: "Medidas de 60cmx100cmx60cm con de fácil limpieza color blanco, con gavetas y puertas abatibles", categoria: "administrativo" },
+            { id: 44, nombre: "MODULAR 80x170x50", caracteristicas: "Medidas de 80cmx170cmx50cm de fácil limpieza color blanco, con dos gavetas superiores de 3 espacios internos con cerradura y llave", categoria: "administrativo" },
+            { id: 45, nombre: "MODULAR MÓVIL 80x70x45", caracteristicas: "Medidas de 80cmx70cmx45cm de fácil limpieza color blanco, con rodachines con seguro para freno", categoria: "administrativo" },
+            { id: 46, nombre: "MODULAR 90x230x35", caracteristicas: "Medidas de 90cmx230cmx35cm de fácil limpieza color blanco, con puerta abatible", categoria: "administrativo" },
+            { id: 47, nombre: "MODULAR 90x235x50", caracteristicas: "Medidas de 90cmx235cmx50cm de fácil limpieza color blanco, con 4 puertas en cruz y una abatible con apertura hacia arriba", categoria: "administrativo" },
+            
+            // Sillas
+            { id: 48, nombre: "SILLA DE ESCRITORIO ERGONÓMICA", caracteristicas: "Silla ergonómica para escritorio con soporte lumbar", categoria: "administrativo" },
+            { id: 49, nombre: "SILLA GERENCIA", caracteristicas: "Silla de gerencia con cinco puntos de apoyo", categoria: "administrativo" },
+            { id: 50, nombre: "SILLAS PARA ESTAR", caracteristicas: "Sillas cómodas para áreas de espera", categoria: "administrativo" },
+            { id: 51, nombre: "SILLAS PLÁSTICAS CON BRAZOS", caracteristicas: "Sillas plásticas con apoyabrazos", categoria: "administrativo" },
+            { id: 52, nombre: "SILLAS PLÁSTICAS SIN BRAZOS", caracteristicas: "Sillas plásticas sin apoyabrazos", categoria: "administrativo" },
+            { id: 53, nombre: "SILLAS RIMAX PEREZOSAS", caracteristicas: "Sillas rimax tipo perezosas en color blanco", categoria: "administrativo" },
+            { id: 54, nombre: "MOBILIARIO TIPO TÁNDEM", caracteristicas: "Asientos tipo tándem para salas de espera", categoria: "administrativo" },
+            
+            // Repisas y soportes
+            { id: 55, nombre: "REPISA METÁLICA", caracteristicas: "Medidas de 100 x 45 cm en lámina cold rolled color gris y reforzado con pie de amigo", categoria: "administrativo" },
+            { id: 56, nombre: "REPISA FLOTANTE", caracteristicas: "Repisa Mensulas Repisa Flotante 2 Pz 30x90 Negro Mate Acero", categoria: "administrativo" },
+            { id: 57, nombre: "CUBIERTA FLOTANTE CON SOPORTE", caracteristicas: "Medidas de 59,5cmx80cm con cubierta en RH de fácil limpieza color blanco y estructura de soporte metálica color gris", categoria: "administrativo" },
+            { id: 58, nombre: "ESTRUCTURA INFERIOR PARA MESÓN", caracteristicas: "Medidas de 141cmx82cmx60cm con estructura en RH de fácil limpieza color blanco. 1 paño interno y 1 división y puertas corredizas con cerradura", categoria: "administrativo" },
+            
+            // Otros elementos
+            { id: 59, nombre: "AIRE ACONDICIONADO", caracteristicas: "Sistema de aire acondicionado para oficinas", categoria: "administrativo" },
+            { id: 60, nombre: "CAJA FUERTE", caracteristicas: "Caja fuerte de seguridad para documentos y valores", categoria: "administrativo" },
+            { id: 61, nombre: "CAJONERO PEQUEÑO RIMAX", caracteristicas: "Cajonero pequeño rimax con 3 cajones", categoria: "administrativo" },
+            { id: 62, nombre: "DISPENSADOR DE AGUA", caracteristicas: "Bidón de agua Dispensador Automático De Agua Para Botellón Recargable", categoria: "administrativo" },
+            { id: 63, nombre: "TABLERO ACRÍLICO 120x100", caracteristicas: "Tablero acrílico de 120 x 100 cm para escritura", categoria: "administrativo" },
+            { id: 64, nombre: "VENTILADOR DE PARED", caracteristicas: "Ventilador para instalación en pared", categoria: "administrativo" },
+            { id: 65, nombre: "VENTILADOR DE PISO", caracteristicas: "Ventilador de piso portátil", categoria: "administrativo" },
+            { id: 66, nombre: "ESCALERA CERTIFICADA ALUMINIO", caracteristicas: "Escalera certificada en aluminio 6 peldaños tipo III 1.80 mts", categoria: "administrativo" },
+            { id: 67, nombre: "ESTIBAS PLÁSTICAS", caracteristicas: "Que tengan soporte central para volúmenes de peso de insumos y reactivos (1,30 m x 1,30 m)", categoria: "administrativo" },
+            { id: 68, nombre: "TORRE VERTICAL 6 GAVETAS", caracteristicas: "Torre vertical en RH de fácil limpieza color blanco de 6 gavetas de desplazamiento Medidas de 60cmx210cmx60cm", categoria: "administrativo" },
+            { id: 69, nombre: "PAPELERA OFICINA", caracteristicas: "Papelera para oficina en material resistente", categoria: "administrativo" },
+            { id: 70, nombre: "SOPORTE PARA CHALECOS PLOMADOS", caracteristicas: "Gancho fijo sobre pared metálico color blanco para soportar dos delantales plomados", categoria: "administrativo" },
+            { id: 71, nombre: "RELOJ DE PARED GRANDE", caracteristicas: "Reloj de pared de tamaño grande para oficina", categoria: "administrativo" }
+        ];
+
+       const mobiliarioMedico = [
+            // A
+            { id: 101, nombre: "Algodonera hospitalaria", caracteristicas: "En acero inoxidable pequeÃ±a", categoria: "medico" },
+            { id: 102, nombre: "Armario mediano plÃ¡stico", caracteristicas: "Gris Hielo- Negro, de dos puertas con entrepaÃ±os internos", categoria: "medico" },
+            { id: 103, nombre: "Atril de pared", caracteristicas: "En acero inoxidable", categoria: "medico" },
+            { id: 104, nombre: "Atril de piso", caracteristicas: "Porta Suero En Acero Inoxidable - Para Bomba De InfusiÃ³n", categoria: "medico" },
+            
+            // B
+            { id: 105, nombre: "BALONES BOBATH MEDIANOS", caracteristicas: "Para rehabilitaciÃ³n fÃ­sica", categoria: "medico" },
+            { id: 106, nombre: "BÃ¡scula", caracteristicas: "BÃ¡scula Brazo Plegable 300kg, 69,5 largo x 45 ancho", categoria: "medico" },
+            { id: 107, nombre: "BASCULA PARA ADULTOS", caracteristicas: "Capacidad hasta 200kg", categoria: "medico" },
+            { id: 108, nombre: "BASCULA PEDIATRICA", caracteristicas: "Digital con tallÃ­metro incorporado, capacidad hasta 20kg", categoria: "medico" },
+            { id: 109, nombre: "Bebedero de agua pedestal", caracteristicas: "Alto 105 cm x Ancho 38 cm x Prof. 38 cm con filtro", categoria: "medico" },
+            
+            // C
+            { id: 110, nombre: "CAMILLA DE TRANSPORTE", caracteristicas: "Con ruedas y barandas laterales", categoria: "medico" },
+            { id: 111, nombre: "CAMILLA GINECOLOGICA", caracteristicas: "Con estribos ajustables y respaldo reclinable", categoria: "medico" },
+            { id: 112, nombre: "CAMILLA PEDIATRICA", caracteristicas: "Con barandas laterales abatibles, ajustable en altura", categoria: "medico" },
+            { id: 113, nombre: "CARRO DE CURACIONES", caracteristicas: "En acero inoxidable con mÃºltiples niveles", categoria: "medico" },
+            { id: 114, nombre: "CARRO DE MEDICAMENTOS", caracteristicas: "Con gavetas y cerradura de seguridad, acero inoxidable", categoria: "medico" },
+            { id: 115, nombre: "CARRO DE PARO", caracteristicas: "Equipado con desfibrilador, medicamentos y equipo de emergencia", categoria: "medico" },
+            { id: 116, nombre: "CARRO HOSPITALARIO MULTIUSOS", caracteristicas: "En acero inoxidable con 3 niveles y ruedas con freno", categoria: "medico" },
+            { id: 117, nombre: "CARRO PARA ROPA SUCIA", caracteristicas: "En acero inoxidable con tapa y pedal", categoria: "medico" },
+            { id: 118, nombre: "CARRO PARA TRANSPORTE DE HISTORIAS CLINICAS", caracteristicas: "Con divisiones y cerradura de seguridad", categoria: "medico" },
+            { id: 119, nombre: "CUNA HOSPITALARIA", caracteristicas: "Con barandas laterales abatibles y colchoneta", categoria: "medico" },
+            { id: 120, nombre: "CUNA PARA RECIEN NACIDO", caracteristicas: "En acrÃ­lico transparente con base rodante", categoria: "medico" },
+            
+            // D - E
+            { id: 121, nombre: "DESFIBRILADOR PORTATIL", caracteristicas: "Con baterÃ­a recargable y electrodos", categoria: "medico" },
+            { id: 122, nombre: "DISPENSADOR DE JABON QUIRURGICO", caracteristicas: "AutomÃ¡tico con sensor, acero inoxidable", categoria: "medico" },
+            { id: 123, nombre: "ESCALERILLA DE DOS PELDAÃ'OS", caracteristicas: "Antideslizante en acero inoxidable", categoria: "medico" },
+            { id: 124, nombre: "ESTANTE PARA MEDICAMENTOS", caracteristicas: "En acero inoxidable con puertas de vidrio y cerradura", categoria: "medico" },
+            { id: 125, nombre: "ESTERILIZADOR UV", caracteristicas: "Para instrumental mÃ©dico pequeÃ±o", categoria: "medico" },
+            
+            // G - I
+            { id: 126, nombre: "GRADILLA METALICA", caracteristicas: "De dos peldaÃ±os con superficie antideslizante", categoria: "medico" },
+            { id: 127, nombre: "HAMACA PARA PESAJE", caracteristicas: "Para bebÃ©s, en tela lavable", categoria: "medico" },
+            { id: 128, nombre: "INCUBADORA NEONATAL", caracteristicas: "Con control de temperatura y humedad", categoria: "medico" },
+            { id: 129, nombre: "INFANTOMETRO", caracteristicas: "Para mediciÃ³n de longitud en bebÃ©s, portatil", categoria: "medico" },
+            
+            // L - M
+            { id: 130, nombre: "LAMPARA CIELITICA", caracteristicas: "LED para quirÃ³fano con brazo articulado", categoria: "medico" },
+            { id: 131, nombre: "LAMPARA DE EXAMEN", caracteristicas: "Cuello de ganso con base rodante", categoria: "medico" },
+            { id: 132, nombre: "LAVAMANOS QUIRURGICO", caracteristicas: "En acero inoxidable con pedal o sensor", categoria: "medico" },
+            { id: 133, nombre: "MESA DE MAYO", caracteristicas: "En acero inoxidable con altura ajustable", categoria: "medico" },
+            { id: 134, nombre: "MESA AUXILIAR", caracteristicas: "En acero inoxidable con ruedas, dos niveles", categoria: "medico" },
+            { id: 135, nombre: "MESA GINECOLOGICA", caracteristicas: "Con pierneras ajustables y gaveta para instrumental", categoria: "medico" },
+            { id: 136, nombre: "MESA PARA INSTRUMENTAL", caracteristicas: "En acero inoxidable con bordes elevados", categoria: "medico" },
+            { id: 137, nombre: "MESA PUENTE", caracteristicas: "Ajustable para cama hospitalaria", categoria: "medico" },
+            { id: 138, nombre: "MONITOR DE SIGNOS VITALES", caracteristicas: "MultiparÃ¡metro con soporte rodante", categoria: "medico" },
+            { id: 139, nombre: "MUEBLE PARA ARCHIVO DE HISTORIAS", caracteristicas: "MetÃ¡lico con divisiones alfabÃ©ticas", categoria: "medico" },
+            
+            // N - P
+            { id: 140, nombre: "NEGATOSCOPIO", caracteristicas: "De un cuerpo LED para radiografÃ­as", categoria: "medico" },
+            { id: 141, nombre: "NEGATOSCOPIO DOBLE", caracteristicas: "De dos cuerpos LED para radiografÃ­as", categoria: "medico" },
+            { id: 142, nombre: "ORGANIZADOR DE MEDICAMENTOS", caracteristicas: "Con divisiones por horario y dÃ­a", categoria: "medico" },
+            { id: 143, nombre: "PAPELERA HOSPITALARIA", caracteristicas: "Con pedal y tapa, para residuos biolÃ³gicos", categoria: "medico" },
+            { id: 144, nombre: "PARAVAN O BIOMBO", caracteristicas: "De tres cuerpos con ruedas", categoria: "medico" },
+            { id: 145, nombre: "PERCHERO HOSPITALARIO", caracteristicas: "En acero inoxidable con base pesada", categoria: "medico" },
+            { id: 146, nombre: "PESA BEBES", caracteristicas: "Digital con funciÃ³n de tara", categoria: "medico" },
+            { id: 147, nombre: "PIPETA O PATO", caracteristicas: "En acero inoxidable para pacientes", categoria: "medico" },
+            { id: 148, nombre: "PORTASUEROS", caracteristicas: "De dos ganchos con base de cinco ruedas", categoria: "medico" },
+            
+            // R - S
+            { id: 149, nombre: "REFRIGERADOR PARA VACUNAS", caracteristicas: "Con control de temperatura y alarma", categoria: "medico" },
+            { id: 150, nombre: "RESUCITADOR MANUAL", caracteristicas: "AmbÃº adulto/pediÃ¡trico con mascarillas", categoria: "medico" },
+            { id: 151, nombre: "RIÃONERA", caracteristicas: "En acero inoxidable de diferentes tamaÃ±os", categoria: "medico" },
+            { id: 152, nombre: "SILLA DE RUEDAS ESTANDAR", caracteristicas: "Plegable con apoyapiÃ©s removibles", categoria: "medico" },
+            { id: 153, nombre: "SILLA DE RUEDAS PEDIATRICA", caracteristicas: "TamaÃ±o ajustable para niÃ±os", categoria: "medico" },
+            { id: 154, nombre: "SILLA PARA TOMA DE MUESTRAS", caracteristicas: "Con apoyabrazos acolchados", categoria: "medico" },
+            { id: 155, nombre: "SOPORTE PARA BALON DE OXIGENO", caracteristicas: "Con ruedas y sujetador de seguridad", categoria: "medico" },
+            
+            // T - V
+            { id: 156, nombre: "TABLA DE REANIMACION", caracteristicas: "RÃ­gida para RCP", categoria: "medico" },
+            { id: 157, nombre: "TABLON ESPINAL", caracteristicas: "Con inmovilizadores y cintas de sujreciÃ³n", categoria: "medico" },
+            { id: 158, nombre: "TANQUE DE OXIGENO PORTATIL", caracteristicas: "Con manÃ³metro y regulador", categoria: "medico" },
+            { id: 159, nombre: "TENSOMETRO DE PARED", caracteristicas: "Aneroide con canastilla", categoria: "medico" },
+            { id: 160, nombre: "TENSOMETRO DIGITAL", caracteristicas: "AutomÃ¡tico de brazo con memoria", categoria: "medico" },
+            { id: 161, nombre: "TERMOMETRO INFRARROJO", caracteristicas: "Sin contacto para mediciÃ³n rÃ¡pida", categoria: "medico" },
+            { id: 162, nombre: "TORRE ENDOSCOPICA", caracteristicas: "Con monitor y sistema de video", categoria: "medico" },
+            { id: 163, nombre: "TRIPODE PORTA BOLSA", caracteristicas: "Para bolsas de diÃ¡lisis", categoria: "medico" },
+            { id: 164, nombre: "VENTILADOR MECANICO", caracteristicas: "Para soporte respiratorio en UCI", categoria: "medico" },
+            { id: 165, nombre: "VITRINA PARA MEDICAMENTOS", caracteristicas: "Con llave y estantes ajustables", categoria: "medico" },
+            
+            // Equipamiento especializado
+            { id: 166, nombre: "ASPIRADOR DE SECRECIONES", caracteristicas: "PortÃ¡til con regulador de succiÃ³n", categoria: "medico" },
+            { id: 167, nombre: "BOMBA DE INFUSION", caracteristicas: "ProgramÃ¡tica con alarmas de seguridad", categoria: "medico" },
+            { id: 168, nombre: "CAMA HOSPITALARIA ELECTRICA", caracteristicas: "Con control remoto y barandas laterales", categoria: "medico" },
+            { id: 169, nombre: "CAMA HOSPITALARIA MANUAL", caracteristicas: "De tres manivelas con colchÃ³n antiescaras", categoria: "medico" },
+            { id: 170, nombre: "ELECTROCARDIOGRAFO", caracteristicas: "De 12 derivaciones con impresora", categoria: "medico" },
+            { id: 171, nombre: "GLUCOMETRO", caracteristicas: "Digital con tiras reactivas", categoria: "medico" },
+            { id: 172, nombre: "LARINGOSCOPIO", caracteristicas: "Con hojas intercambiables adulto/pediÃ¡trico", categoria: "medico" },
+            { id: 173, nombre: "NEBULIZADOR", caracteristicas: "De compresor con mascarilla adulto/pediÃ¡trico", categoria: "medico" },
+            { id: 174, nombre: "OTOSCOPIO", caracteristicas: "Con especulos de diferentes tamaÃ±os", categoria: "medico" },
+            { id: 175, nombre: "OXIMETRO DE PULSO", caracteristicas: "Digital con alarma de SpO2", categoria: "medico" },
+            { id: 176, nombre: "PULSIOXIMETRO DE MESA", caracteristicas: "Con registro continuo y alarmas", categoria: "medico" },
+            { id: 177, nombre: "REFRIGERADOR PARA BANCO DE SANGRE", caracteristicas: "Con control de temperatura 2-6Â°C", categoria: "medico" },
+            { id: 178, nombre: "ULTRASONIDO PORTATIL", caracteristicas: "Con transductores intercambiables", categoria: "medico" }
+        ];
+
+        let currentTab = 'administrativo';
+        let selectedItems = {};
+
+        // Inicializar fecha actual
+        document.getElementById('fecha').valueAsDate = new Date();
+
+        function changeTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            loadItems();
+        }
+
+        function loadItems() {
+            const items = currentTab === 'administrativo' ? mobiliarioAdministrativo : mobiliarioMedico;
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const filteredItems = items.filter(item => 
+                item.nombre.toLowerCase().includes(searchTerm) || 
+                item.caracteristicas.toLowerCase().includes(searchTerm)
+            );
+
+            const grid = document.getElementById('itemsGrid');
+            grid.innerHTML = filteredItems.map(item => `
+                <div class="item-card ${selectedItems[item.id] ? 'selected' : ''}" onclick="toggleItem(${item.id})">
+                    <input type="checkbox" class="item-checkbox" ${selectedItems[item.id] ? 'checked' : ''}>
+                    <div class="item-info">
+                        <div class="item-name">${item.nombre}</div>
+                        <div class="item-specs">${item.caracteristicas}</div>
+                    </div>
+                    <div class="item-quantity" onclick="event.stopPropagation()">
+                        <button class="quantity-btn" onclick="decreaseQuantity(${item.id})">-</button>
+                        <input type="number" class="quantity-input" id="qty-${item.id}" 
+                               value="${selectedItems[item.id]?.cantidad || 1}" min="1">
+                        <button class="quantity-btn" onclick="increaseQuantity(${item.id})">+</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleItem(itemId) {
+            const allItems = [...mobiliarioAdministrativo, ...mobiliarioMedico];
+            const item = allItems.find(i => i.id === itemId);
+            
+            if (selectedItems[itemId]) {
+                delete selectedItems[itemId];
+            } else {
+                selectedItems[itemId] = {
+                    ...item,
+                    cantidad: parseInt(document.getElementById(`qty-${itemId}`).value) || 1
+                };
+            }
+            
+            loadItems();
+            updateSelectedItemsList();
+        }
+
+        function increaseQuantity(itemId) {
+            const input = document.getElementById(`qty-${itemId}`);
+            input.value = parseInt(input.value) + 1;
+            if (selectedItems[itemId]) {
+                selectedItems[itemId].cantidad = parseInt(input.value);
+                updateSelectedItemsList();
+            }
+        }
+
+        function decreaseQuantity(itemId) {
+            const input = document.getElementById(`qty-${itemId}`);
+            if (parseInt(input.value) > 1) {
+                input.value = parseInt(input.value) - 1;
+                if (selectedItems[itemId]) {
+                    selectedItems[itemId].cantidad = parseInt(input.value);
+                    updateSelectedItemsList();
+                }
+            }
+        }
+
+        function updateSelectedItemsList() {
+            const selectedArray = Object.values(selectedItems);
+            const section = document.getElementById('selectedItemsSection');
+            const list = document.getElementById('selectedItemsList');
+            
+            if (selectedArray.length > 0) {
+                section.style.display = 'block';
+                list.innerHTML = selectedArray.map(item => `
+                    <div class="selected-item">
+                        <span>${item.nombre} - Cantidad: ${item.cantidad}</span>
+                        <button class="remove-btn" onclick="removeItem(${item.id})">Eliminar</button>
+                    </div>
+                `).join('');
+            } else {
+                section.style.display = 'none';
+            }
+        }
+
+        function removeItem(itemId) {
+            delete selectedItems[itemId];
+            loadItems();
+            updateSelectedItemsList();
+        }
+
+        document.getElementById('searchInput').addEventListener('input', loadItems);
+
+        // IMPORTANTE: Usar función de Netlify en lugar de llamada directa a Airtable
+        document.getElementById('requerimientoForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const selectedArray = Object.values(selectedItems);
+            if (selectedArray.length === 0) {
+                alert('Por favor seleccione al menos un item');
+                return;
+            }
+
+            document.getElementById('submitBtn').disabled = true;
+            document.getElementById('loading').classList.add('active');
+            
+            const formData = {
+                servicio: document.getElementById('servicio').value,
+                solicitante: document.getElementById('solicitante').value,
+                cargo: document.getElementById('cargo').value,
+                email: document.getElementById('email').value,
+                telefono: document.getElementById('telefono').value,
+                fecha: document.getElementById('fecha').value,
+                justificacion: document.getElementById('justificacion').value,
+                items: selectedArray.map(item => ({
+                    nombre: item.nombre,
+                    caracteristicas: item.caracteristicas,
+                    cantidad: item.cantidad,
+                    categoria: item.categoria
+                }))
+            };
+
+            try {
+                // USAR FUNCIÓN DE NETLIFY
+                const response = await fetch('/.netlify/functions/submit-request', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    document.getElementById('successMessage').classList.add('active');
+                    setTimeout(() => {
+                        document.getElementById('successMessage').classList.remove('active');
+                    }, 5000);
+                    
+                    // Limpiar formulario
+                    document.getElementById('requerimientoForm').reset();
+                    document.getElementById('fecha').valueAsDate = new Date();
+                    selectedItems = {};
+                    updateSelectedItemsList();
+                    loadItems();
+                } else {
+                    throw new Error(result.error || 'Error al enviar');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('errorMessage').textContent = 
+                    'Error al enviar la solicitud. Verifique su conexión e intente nuevamente.';
+                document.getElementById('errorMessage').classList.add('active');
+                setTimeout(() => {
+                    document.getElementById('errorMessage').classList.remove('active');
+                }, 5000);
+            } finally {
+                document.getElementById('submitBtn').disabled = false;
+                document.getElementById('loading').classList.remove('active');
+            }
+        });
+
+        // Cargar items iniciales
+        loadItems();
+    </script>
+</body>
+</html>
