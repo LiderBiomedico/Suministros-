@@ -1206,12 +1206,23 @@
 
         // Exportar a Excel (simplificado)
 // Exportar a Excel (mejorado con mejor estructura de celdas)
+		// Exportar a Excel (con separaci  n correcta de columnas usando punto y coma)
 function exportToExcel() {
     // Crear fecha actual para el reporte
     const fechaReporte = new Date().toLocaleDateString('es-CO');
     const horaReporte = new Date().toLocaleTimeString('es-CO');
     
-    // Preparar datos agrupados por servicio
+    // Funci  n auxiliar para limpiar texto y evitar problemas con el CSV
+    function limpiarTexto(texto) {
+        if (!texto) return '';
+        return String(texto)
+            .replace(/;/g, ',') // Reemplazar punto y coma por coma
+            .replace(/"/g, '""') // Escapar comillas
+            .replace(/\n/g, ' ') // Eliminar saltos de l  nea
+            .replace(/\r/g, ' '); // Eliminar retornos de carro
+    }
+    
+    // Preparar datos agrupados
     const datosPorServicio = {};
     let totalGeneralItems = 0;
     let totalGeneralSolicitudes = 0;
@@ -1256,7 +1267,7 @@ function exportToExcel() {
         totalGeneralSolicitudes++;
     });
     
-    // Crear consolidado de items m芍s solicitados
+    // Crear consolidado de items
     const consolidadoItems = {};
     filteredRequests.forEach(request => {
         if (request.items && Array.isArray(request.items)) {
@@ -1265,15 +1276,13 @@ function exportToExcel() {
                 if (!consolidadoItems[key]) {
                     consolidadoItems[key] = {
                         nombre: item.nombre,
-                        categoria: item.categoria || 'Sin categor赤a',
-                        caracteristicas: item.caracteristicas || '',
+                        categoria: item.categoria || 'Sin categor  a',
+                        caracteristicas: item.caracteristicas || 'Sin especificar',
                         cantidad: 0,
-                        solicitudes: 0,
                         servicios: new Set()
                     };
                 }
                 consolidadoItems[key].cantidad += item.cantidad || 0;
-                consolidadoItems[key].solicitudes++;
                 consolidadoItems[key].servicios.add(request.Servicio || 'Sin servicio');
             });
         }
@@ -1283,116 +1292,129 @@ function exportToExcel() {
     const itemsOrdenados = Object.values(consolidadoItems)
         .sort((a, b) => b.cantidad - a.cantidad);
     
-    // Construir CSV con estructura mejorada
-    let csv = '\uFEFF'; // BOM para UTF-8
+    // IMPORTANTE: Usar punto y coma (;) como separador
+    let csv = '\uFEFF'; // BOM para UTF-8 y correcta visualizaci  n de tildes
     
-    // SECCI車N 1: ENCABEZADO
-    csv += ',,HOSPITAL SUSANA L車PEZ VALENCIA,,,,\n';
-    csv += ',,SISTEMA DE GESTI車N DE MOBILIARIO,,,,\n';
-    csv += ',,CONSOLIDADO DE PEDIDOS,,,,\n';
+    // ENCABEZADO PRINCIPAL
+    csv += 'HOSPITAL SUSANA L  PEZ VALENCIA - CONSOLIDADO DE PEDIDOS\n';
     csv += '\n';
-    csv += 'Fecha:,' + fechaReporte + ',Hora:,' + horaReporte + ',,\n';
-    csv += 'Generado por:,Sistema de Consolidados,,,\n';
+    csv += 'Fecha;' + fechaReporte + ';Hora;' + horaReporte + '\n';
     csv += '\n';
-    csv += ',,,,,,\n'; // L赤nea separadora
     
-    // SECCI車N 2: RESUMEN EJECUTIVO
-    csv += 'RESUMEN EJECUTIVO,,,,,\n';
-    csv += ',,,,,,\n';
-    csv += 'M谷trica,Valor,,,,\n';
-    csv += 'Total de Solicitudes,' + totalGeneralSolicitudes + ',,,,\n';
-    csv += 'Total de Items Solicitados,' + totalGeneralItems + ',,,,\n';
-    csv += 'Servicios Involucrados,' + Object.keys(datosPorServicio).length + ',,,,\n';
-    csv += 'Solicitudes Pendientes,' + totalPendientes + ',,,,\n';
-    csv += 'Solicitudes Aprobadas,' + totalAprobadas + ',,,,\n';
-    csv += 'Solicitudes Rechazadas,' + totalRechazadas + ',,,,\n';
+    // SECCI  N 1: RESUMEN EJECUTIVO
+    csv += 'RESUMEN EJECUTIVO\n';
     csv += '\n';
-    csv += ',,,,,,\n'; // L赤nea separadora
+    csv += 'Concepto;Valor\n';
+    csv += 'Total de Solicitudes;' + totalGeneralSolicitudes + '\n';
+    csv += 'Total de Items;' + totalGeneralItems + '\n';
+    csv += 'Servicios Involucrados;' + Object.keys(datosPorServicio).length + '\n';
+    csv += 'Pendientes;' + totalPendientes + '\n';
+    csv += 'Aprobadas;' + totalAprobadas + '\n';
+    csv += 'Rechazadas;' + totalRechazadas + '\n';
+    csv += '\n';
+    csv += '\n';
     
-    // SECCI車N 3: TOP 15 ITEMS M芍S SOLICITADOS
-    csv += 'TOP 15 ITEMS M芍S SOLICITADOS,,,,,\n';
-    csv += ',,,,,,\n';
-    csv += 'Posici車n,Item,Categor赤a,Caracter赤sticas,Cantidad Total,N迆mero de Servicios,Servicios Solicitantes\n';
+    // SECCI  N 2: TOP 15 ITEMS M  S SOLICITADOS
+    csv += 'TOP 15 ITEMS M  S SOLICITADOS\n';
+    csv += '\n';
+    csv += 'Posici  n;Item;Categor  a;Cantidad;Servicios\n';
     
     itemsOrdenados.slice(0, 15).forEach((item, index) => {
-        const servicios = Array.from(item.servicios).join(' | ');
-        const caracteristicas = item.caracteristicas.replace(/,/g, ';').replace(/"/g, '""');
-        csv += `${index + 1},"${item.nombre}","${item.categoria}","${caracteristicas}",${item.cantidad},${item.servicios.size},"${servicios}"\n`;
+        const servicios = Array.from(item.servicios).join(' - ');
+        csv += (index + 1) + ';';
+        csv += '"' + limpiarTexto(item.nombre) + '";';
+        csv += '"' + limpiarTexto(item.categoria) + '";';
+        csv += item.cantidad + ';';
+        csv += '"' + limpiarTexto(servicios) + '"\n';
     });
     
     csv += '\n';
-    csv += ',,,,,,\n'; // L赤nea separadora
+    csv += '\n';
     
-    // SECCI車N 4: RESUMEN POR SERVICIO
-    csv += 'RESUMEN POR SERVICIO,,,,,\n';
-    csv += ',,,,,,\n';
-    csv += 'Servicio,Total Solicitudes,Items Totales,Pendientes,Aprobadas,Rechazadas,\n';
+    // SECCI  N 3: RESUMEN POR SERVICIO
+    csv += 'RESUMEN POR SERVICIO\n';
+    csv += '\n';
+    csv += 'Servicio;Total Solicitudes;Items;Pendientes;Aprobadas;Rechazadas\n';
     
     Object.entries(datosPorServicio)
         .sort((a, b) => b[1].totalItems - a[1].totalItems)
         .forEach(([servicio, datos]) => {
-            csv += `"${servicio.replace(/_/g, ' ').toUpperCase()}",${datos.solicitudes.length},${datos.totalItems},${datos.pendientes},${datos.aprobadas},${datos.rechazadas},\n`;
+            csv += '"' + limpiarTexto(servicio.replace(/_/g, ' ').toUpperCase()) + '";';
+            csv += datos.solicitudes.length + ';';
+            csv += datos.totalItems + ';';
+            csv += datos.pendientes + ';';
+            csv += datos.aprobadas + ';';
+            csv += datos.rechazadas + '\n';
         });
     
     csv += '\n';
-    csv += ',,,,,,\n'; // L赤nea separadora
+    csv += '\n';
     
-    // SECCI車N 5: DETALLE COMPLETO DE SOLICITUDES
-    csv += 'DETALLE COMPLETO DE SOLICITUDES,,,,,\n';
-    csv += ',,,,,,\n';
-    csv += 'Fecha,Servicio,Solicitante,Cargo,Estado,Item,Cantidad,Caracter赤sticas,Justificaci車n\n';
+    // SECCI  N 4: DETALLE DE SOLICITUDES
+    csv += 'DETALLE COMPLETO DE SOLICITUDES\n';
+    csv += '\n';
+    csv += 'Fecha;Servicio;Solicitante;Cargo;Estado;Item;Cantidad;Caracter  sticas;Justificaci  n\n';
     
-    // Ordenar por servicio y fecha
-    const solicitudesOrdenadas = [...filteredRequests].sort((a, b) => {
-        const servicioA = a.Servicio || 'Sin servicio';
-        const servicioB = b.Servicio || 'Sin servicio';
-        if (servicioA !== servicioB) return servicioA.localeCompare(servicioB);
-        return (a.Fecha || '').localeCompare(b.Fecha || '');
-    });
-    
-    solicitudesOrdenadas.forEach(request => {
-        const fecha = request.Fecha || '';
-        const servicio = (request.Servicio || 'Sin servicio').replace(/_/g, ' ');
-        const solicitante = request.Solicitante || '';
-        const cargo = request.Cargo || '';
-        const estado = request.Estado || 'Pendiente';
-        const justificacion = (request.Justificacion || '').replace(/"/g, '""').replace(/\n/g, ' ');
+    filteredRequests.forEach(request => {
+        const fecha = limpiarTexto(request.Fecha);
+        const servicio = limpiarTexto((request.Servicio || 'Sin servicio').replace(/_/g, ' '));
+        const solicitante = limpiarTexto(request.Solicitante);
+        const cargo = limpiarTexto(request.Cargo);
+        const estado = limpiarTexto(request.Estado || 'Pendiente');
+        const justificacion = limpiarTexto(request.Justificacion);
         
         if (request.items && Array.isArray(request.items) && request.items.length > 0) {
             request.items.forEach(item => {
-                const caracteristicas = (item.caracteristicas || '').replace(/,/g, ';').replace(/"/g, '""');
-                csv += `"${fecha}","${servicio}","${solicitante}","${cargo}","${estado}","${item.nombre}",${item.cantidad},"${caracteristicas}","${justificacion}"\n`;
+                csv += '"' + fecha + '";';
+                csv += '"' + servicio + '";';
+                csv += '"' + solicitante + '";';
+                csv += '"' + cargo + '";';
+                csv += '"' + estado + '";';
+                csv += '"' + limpiarTexto(item.nombre) + '";';
+                csv += item.cantidad + ';';
+                csv += '"' + limpiarTexto(item.caracteristicas) + '";';
+                csv += '"' + justificacion + '"\n';
             });
         } else {
-            csv += `"${fecha}","${servicio}","${solicitante}","${cargo}","${estado}","Sin items",0,"","${justificacion}"\n`;
+            csv += '"' + fecha + '";';
+            csv += '"' + servicio + '";';
+            csv += '"' + solicitante + '";';
+            csv += '"' + cargo + '";';
+            csv += '"' + estado + '";';
+            csv += 'Sin items;';
+            csv += '0;';
+            csv += ';';
+            csv += '"' + justificacion + '"\n';
         }
     });
     
     csv += '\n';
-    csv += ',,,,,,\n'; // L赤nea separadora
+    csv += '\n';
     
-    // SECCI車N 6: CONSOLIDADO TOTAL DE ITEMS
-    csv += 'CONSOLIDADO TOTAL DE ITEMS,,,,,\n';
-    csv += ',,,,,,\n';
-    csv += 'Item,Categor赤a,Caracter赤sticas,Cantidad Total,Veces Solicitado,N迆mero de Servicios,\n';
+    // SECCI  N 5: CONSOLIDADO DE TODOS LOS ITEMS
+    csv += 'CONSOLIDADO TOTAL DE ITEMS\n';
+    csv += '\n';
+    csv += 'Item;Categor  a;Caracter  sticas;Cantidad Total;N  mero de Servicios\n';
     
     itemsOrdenados.forEach(item => {
-        const caracteristicas = item.caracteristicas.replace(/,/g, ';').replace(/"/g, '""');
-        csv += `"${item.nombre}","${item.categoria}","${caracteristicas}",${item.cantidad},${item.solicitudes},${item.servicios.size},\n`;
+        csv += '"' + limpiarTexto(item.nombre) + '";';
+        csv += '"' + limpiarTexto(item.categoria) + '";';
+        csv += '"' + limpiarTexto(item.caracteristicas) + '";';
+        csv += item.cantidad + ';';
+        csv += item.servicios.size + '\n';
     });
     
     csv += '\n';
-    csv += ',,,,,,\n'; // L赤nea separadora
+    csv += '\n';
+    csv += 'Fin del Reporte\n';
+    csv += 'Sistema de Gesti  n de Mobiliario - Hospital Susana L  pez Valencia\n';
+    csv += 'Desarrollado por: Ing. Paul Eduardo Mu?oz R.\n';
     
-    // SECCI車N 7: PIE DE REPORTE
-    csv += ',,,,,,\n';
-    csv += 'Fin del Reporte,,,,,\n';
-    csv += 'Sistema de Gesti車n de Mobiliario,,,,,\n';
-    csv += 'Hospital Susana L車pez Valencia,,,,,\n';
-    csv += 'Desarrollado por: Ing. Paul Eduardo Mu?oz R.,,,,,\n';
+    // Crear y descargar archivo con el tipo MIME correcto para Excel
+    const blob = new Blob([csv], { 
+        type: 'text/csv;charset=utf-8' 
+    });
     
-    // Crear y descargar archivo
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -1401,21 +1423,24 @@ function exportToExcel() {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
     a.download = `consolidado_pedidos_HSL_${timestamp}.csv`;
     
+    // Descargar
+    document.body.appendChild(a);
     a.click();
+    document.body.removeChild(a);
     
     // Limpiar
     window.URL.revokeObjectURL(url);
     
     // Notificar al usuario
     alert('? Reporte exportado exitosamente\n\n' +
-          'El archivo incluye 6 secciones:\n' +
-          '1. Resumen Ejecutivo\n' +
-          '2. Top 15 Items M芍s Solicitados\n' +
-          '3. Resumen por Servicio\n' +
-          '4. Detalle Completo de Solicitudes\n' +
-          '5. Consolidado Total de Items\n' +
-          '6. Estad赤sticas Generales\n\n' +
-          'Abre el archivo en Excel para una mejor visualizaci車n.');
+          'El archivo CSV est   listo para abrirse en Excel.\n' +
+          'Las columnas est  n separadas correctamente.\n\n' +
+          'Incluye:\n' +
+          '? Resumen ejecutivo\n' +
+          '? Top 15 items m  s solicitados\n' +
+          '? Resumen por servicio\n' +
+          '? Detalle completo de solicitudes\n' +
+          '? Consolidado total de items');
 }
 
         // Cerrar modal con ESC
