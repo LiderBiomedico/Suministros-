@@ -598,7 +598,7 @@
                         ğŸ“Š Exportar a Excel
                     </button>
                     <button class="btn btn-secondary" onclick="window.print()">
-                        ğŸ–¨ï¸ Imprimir
+                        ğŸ–¨ï¸?Imprimir
                     </button>
                 </div>
             </div>
@@ -606,7 +606,7 @@
             <!-- Tabs para diferentes vistas -->
             <div class="tabs">
                 <button class="tab active" onclick="changeView('cards')">
-                    ğŸ—‚ï¸ Vista por Servicio
+                    ğŸ—‚ï¸?Vista por Servicio
                 </button>
                 <button class="tab" onclick="changeView('table')">
                     ğŸ“‹ Vista de Tabla
@@ -1106,10 +1106,10 @@
                     <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end;">
                         ${request.Estado === 'Pendiente' ? `
                             <button class="btn btn-secondary" onclick="updateRequestStatus('${request.id}', 'Aprobado')">
-                                âœ… Aprobar
+                                âœ?Aprobar
                             </button>
                             <button class="btn btn-danger" onclick="updateRequestStatus('${request.id}', 'Rechazado')">
-                                âŒ Rechazar
+                                â?Rechazar
                             </button>
                         ` : ''}
                     </div>
@@ -1205,26 +1205,172 @@
         }
 
         // Exportar a Excel (simplificado)
-        function exportToExcel() {
-            // Crear contenido CSV
-            let csv = 'Servicio,Solicitante,Cargo,Fecha,Item,Cantidad,Estado\n';
-            
-            filteredRequests.forEach(request => {
-                if (request.items && Array.isArray(request.items)) {
-                    request.items.forEach(item => {
-                        csv += `"${request.Servicio || ''}","${request.Solicitante || ''}","${request.Cargo || ''}","${request.Fecha || ''}","${item.nombre}","${item.cantidad}","${request.Estado || ''}"\n`;
-                    });
-                }
-            });
-            
-            // Descargar archivo
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `consolidado_pedidos_${new Date().toISOString().split('T')[0]}.csv`;
-            a.click();
+       // Exportar a Excel (mejorado y consolidado)
+function exportToExcel() {
+    // Crear fecha actual para el reporte
+    const fechaReporte = new Date().toLocaleDateString('es-CO');
+    const horaReporte = new Date().toLocaleTimeString('es-CO');
+    
+    // Preparar datos agrupados por servicio
+    const datosPorServicio = {};
+    let totalGeneralItems = 0;
+    let totalGeneralSolicitudes = 0;
+    
+    // Agrupar solicitudes por servicio
+    filteredRequests.forEach(request => {
+        const servicio = request.Servicio || 'Sin servicio';
+        if (!datosPorServicio[servicio]) {
+            datosPorServicio[servicio] = {
+                solicitudes: [],
+                totalItems: 0,
+                pendientes: 0,
+                aprobadas: 0,
+                rechazadas: 0
+            };
         }
+        
+        datosPorServicio[servicio].solicitudes.push(request);
+        
+        // Contar estados
+        if (request.Estado === 'Pendiente') datosPorServicio[servicio].pendientes++;
+        else if (request.Estado === 'Aprobado') datosPorServicio[servicio].aprobadas++;
+        else if (request.Estado === 'Rechazado') datosPorServicio[servicio].rechazadas++;
+        
+        // Sumar items
+        if (request.items && Array.isArray(request.items)) {
+            const itemsCount = request.items.reduce((sum, item) => sum + (item.cantidad || 0), 0);
+            datosPorServicio[servicio].totalItems += itemsCount;
+            totalGeneralItems += itemsCount;
+        }
+        
+        totalGeneralSolicitudes++;
+    });
+    
+    // Crear consolidado de items m¨¢s solicitados
+    const consolidadoItems = {};
+    filteredRequests.forEach(request => {
+        if (request.items && Array.isArray(request.items)) {
+            request.items.forEach(item => {
+                const key = item.nombre;
+                if (!consolidadoItems[key]) {
+                    consolidadoItems[key] = {
+                        nombre: item.nombre,
+                        categoria: item.categoria || 'Sin categor¨ªa',
+                        cantidad: 0,
+                        servicios: new Set()
+                    };
+                }
+                consolidadoItems[key].cantidad += item.cantidad || 0;
+                consolidadoItems[key].servicios.add(request.Servicio || 'Sin servicio');
+            });
+        }
+    });
+    
+    // Ordenar items por cantidad (top 10)
+    const topItems = Object.values(consolidadoItems)
+        .sort((a, b) => b.cantidad - a.cantidad)
+        .slice(0, 10);
+    
+    // Construir CSV con mejor formato
+    let csv = '\uFEFF'; // BOM para UTF-8
+    
+    // Encabezado del reporte
+    csv += 'HOSPITAL SUSANA L¨®PEZ VALENCIA\n';
+    csv += 'CONSOLIDADO DE PEDIDOS DE MOBILIARIO\n';
+    csv += `Fecha del reporte:,${fechaReporte},Hora:,${horaReporte}\n`;
+    csv += '\n';
+    
+    // Resumen ejecutivo
+    csv += 'RESUMEN EJECUTIVO\n';
+    csv += `Total de solicitudes:,${totalGeneralSolicitudes}\n`;
+    csv += `Total de items solicitados:,${totalGeneralItems}\n`;
+    csv += `Servicios involucrados:,${Object.keys(datosPorServicio).length}\n`;
+    csv += '\n';
+    
+    // Top 10 items m¨¢s solicitados
+    csv += 'TOP 10 ITEMS M¨¢S SOLICITADOS\n';
+    csv += 'Posici¨®n,Item,Categor¨ªa,Cantidad Total,Servicios Solicitantes\n';
+    topItems.forEach((item, index) => {
+        const servicios = Array.from(item.servicios).join(' - ');
+        csv += `${index + 1},"${item.nombre}","${item.categoria}",${item.cantidad},"${servicios}"\n`;
+    });
+    csv += '\n';
+    
+    // Detalle por servicio
+    csv += 'DETALLE POR SERVICIO\n';
+    csv += '\n';
+    
+    Object.entries(datosPorServicio).forEach(([servicio, datos]) => {
+        // Encabezado del servicio
+        csv += `SERVICIO:,${servicio.replace(/_/g, ' ').toUpperCase()}\n`;
+        csv += `Total solicitudes:,${datos.solicitudes.length},Pendientes:,${datos.pendientes},Aprobadas:,${datos.aprobadas},Rechazadas:,${datos.rechazadas}\n`;
+        csv += `Total items del servicio:,${datos.totalItems}\n`;
+        csv += '\n';
+        
+        // Detalle de solicitudes del servicio
+        csv += 'Fecha,Solicitante,Cargo,Estado,Items Solicitados,Cantidad,Justificaci¨®n\n';
+        
+        datos.solicitudes.forEach(request => {
+            const fecha = request.Fecha || '';
+            const solicitante = request.Solicitante || '';
+            const cargo = request.Cargo || '';
+            const estado = request.Estado || 'Pendiente';
+            const justificacion = (request.Justificacion || '').replace(/"/g, '""').replace(/\n/g, ' ');
+            
+            if (request.items && Array.isArray(request.items) && request.items.length > 0) {
+                request.items.forEach((item, index) => {
+                    if (index === 0) {
+                        // Primera fila con todos los datos
+                        csv += `"${fecha}","${solicitante}","${cargo}","${estado}","${item.nombre}",${item.cantidad},"${justificacion}"\n`;
+                    } else {
+                        // Filas adicionales solo con items
+                        csv += `,,,,,"${item.nombre}",${item.cantidad},\n`;
+                    }
+                });
+            } else {
+                // Sin items
+                csv += `"${fecha}","${solicitante}","${cargo}","${estado}","Sin items",0,"${justificacion}"\n`;
+            }
+        });
+        
+        csv += '\n';
+        csv += '---\n';
+        csv += '\n';
+    });
+    
+    // Resumen consolidado final
+    csv += 'RESUMEN CONSOLIDADO DE TODOS LOS ITEMS\n';
+    csv += 'Item,Categor¨ªa,Cantidad Total,N¨²mero de Servicios\n';
+    
+    Object.values(consolidadoItems)
+        .sort((a, b) => b.cantidad - a.cantidad)
+        .forEach(item => {
+            csv += `"${item.nombre}","${item.categoria}",${item.cantidad},${item.servicios.size}\n`;
+        });
+    
+    csv += '\n';
+    csv += 'Fin del reporte\n';
+    csv += 'Sistema de Gesti¨®n de Mobiliario - Hospital Susana L¨®pez Valencia\n';
+    csv += 'Desarrollado por: Ing. Paul Eduardo Mu?oz R.\n';
+    
+    // Crear y descargar archivo
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    
+    // Nombre del archivo con fecha y hora
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
+    a.download = `consolidado_pedidos_HSL_${timestamp}.csv`;
+    
+    a.click();
+    
+    // Limpiar
+    window.URL.revokeObjectURL(url);
+    
+    // Notificar al usuario
+    alert('El reporte consolidado ha sido generado exitosamente.\n\nEl archivo incluye:\n? Resumen ejecutivo\n? Top 10 items m¨¢s solicitados\n? Detalle por servicio\n? Consolidado total de items');
+}
 
         // Cerrar modal con ESC
         document.addEventListener('keydown', (e) => {
