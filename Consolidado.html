@@ -598,7 +598,7 @@
                         üìä Exportar a Excel
                     </button>
                     <button class="btn btn-secondary" onclick="window.print()">
-                        üñ®Ô∏?Imprimir
+                        üñ® ?Imprimir
                     </button>
                 </div>
             </div>
@@ -606,7 +606,7 @@
             <!-- Tabs para diferentes vistas -->
             <div class="tabs">
                 <button class="tab active" onclick="changeView('cards')">
-                    üóÇÔ∏?Vista por Servicio
+                    üóÇ ?Vista por Servicio
                 </button>
                 <button class="tab" onclick="changeView('table')">
                     üìã Vista de Tabla
@@ -1106,10 +1106,10 @@
                     <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end;">
                         ${request.Estado === 'Pendiente' ? `
                             <button class="btn btn-secondary" onclick="updateRequestStatus('${request.id}', 'Aprobado')">
-                                ‚ú?Aprobar
+                                 ?Aprobar
                             </button>
                             <button class="btn btn-danger" onclick="updateRequestStatus('${request.id}', 'Rechazado')">
-                                ‚ù?Rechazar
+                                 ?Rechazar
                             </button>
                         ` : ''}
                     </div>
@@ -1246,7 +1246,7 @@ function exportToExcel() {
         totalGeneralSolicitudes++;
     });
     
-    // Crear consolidado de items m®¢s solicitados
+    // Crear consolidado de items m  s solicitados
     const consolidadoItems = {};
     filteredRequests.forEach(request => {
         if (request.items && Array.isArray(request.items)) {
@@ -1255,7 +1255,7 @@ function exportToExcel() {
                 if (!consolidadoItems[key]) {
                     consolidadoItems[key] = {
                         nombre: item.nombre,
-                        categoria: item.categoria || 'Sin categor®™a',
+                        categoria: item.categoria || 'Sin categor  a',
                         cantidad: 0,
                         servicios: new Set()
                     };
@@ -1275,7 +1275,7 @@ function exportToExcel() {
     let csv = '\uFEFF'; // BOM para UTF-8
     
     // Encabezado del reporte
-    csv += 'HOSPITAL SUSANA L®ÆPEZ VALENCIA\n';
+    csv += 'HOSPITAL SUSANA L  PEZ VALENCIA\n';
     csv += 'CONSOLIDADO DE PEDIDOS DE MOBILIARIO\n';
     csv += `Fecha del reporte:,${fechaReporte},Hora:,${horaReporte}\n`;
     csv += '\n';
@@ -1287,9 +1287,9 @@ function exportToExcel() {
     csv += `Servicios involucrados:,${Object.keys(datosPorServicio).length}\n`;
     csv += '\n';
     
-    // Top 10 items m®¢s solicitados
-    csv += 'TOP 10 ITEMS M®¢S SOLICITADOS\n';
-    csv += 'Posici®Æn,Item,Categor®™a,Cantidad Total,Servicios Solicitantes\n';
+    // Top 10 items m  s solicitados
+    csv += 'TOP 10 ITEMS M  S SOLICITADOS\n';
+    csv += 'Posici  n,Item,Categor  a,Cantidad Total,Servicios Solicitantes\n';
     topItems.forEach((item, index) => {
         const servicios = Array.from(item.servicios).join(' - ');
         csv += `${index + 1},"${item.nombre}","${item.categoria}",${item.cantidad},"${servicios}"\n`;
@@ -1308,7 +1308,7 @@ function exportToExcel() {
         csv += '\n';
         
         // Detalle de solicitudes del servicio
-        csv += 'Fecha,Solicitante,Cargo,Estado,Items Solicitados,Cantidad,Justificaci®Æn\n';
+        csv += 'Fecha,Solicitante,Cargo,Estado,Items Solicitados,Cantidad,Justificaci  n\n';
         
         datos.solicitudes.forEach(request => {
             const fecha = request.Fecha || '';
@@ -1340,7 +1340,7 @@ function exportToExcel() {
     
     // Resumen consolidado final
     csv += 'RESUMEN CONSOLIDADO DE TODOS LOS ITEMS\n';
-    csv += 'Item,Categor®™a,Cantidad Total,N®≤mero de Servicios\n';
+    csv += 'Item,Categor  a,Cantidad Total,N  mero de Servicios\n';
     
     Object.values(consolidadoItems)
         .sort((a, b) => b.cantidad - a.cantidad)
@@ -1350,7 +1350,7 @@ function exportToExcel() {
     
     csv += '\n';
     csv += 'Fin del reporte\n';
-    csv += 'Sistema de Gesti®Æn de Mobiliario - Hospital Susana L®Æpez Valencia\n';
+    csv += 'Sistema de Gesti  n de Mobiliario - Hospital Susana L  pez Valencia\n';
     csv += 'Desarrollado por: Ing. Paul Eduardo Mu?oz R.\n';
     
     // Crear y descargar archivo
@@ -1369,7 +1369,7 @@ function exportToExcel() {
     window.URL.revokeObjectURL(url);
     
     // Notificar al usuario
-    alert('El reporte consolidado ha sido generado exitosamente.\n\nEl archivo incluye:\n? Resumen ejecutivo\n? Top 10 items m®¢s solicitados\n? Detalle por servicio\n? Consolidado total de items');
+    alert('El reporte consolidado ha sido generado exitosamente.\n\nEl archivo incluye:\n? Resumen ejecutivo\n? Top 10 items m  s solicitados\n? Detalle por servicio\n? Consolidado total de items');
 }
 
         // Cerrar modal con ESC
